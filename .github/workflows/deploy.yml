@@ -23,10 +23,11 @@ jobs:
         run: npm run build --prod
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: JamesIves/github-pages-deploy-action@v4 # Update to v4 instead of 4.1.5
         with:
           branch: gh-pages
           folder: dist/developer-portfolio
+          token: ${{ secrets.GITHUB_TOKEN }} # Make sure this line is included
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
