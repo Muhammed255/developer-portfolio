@@ -26,12 +26,12 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: gh-pages
-          folder: dist/portfolio-frontend
+          folder: dist/developer-portfolio
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
-          publish-dir: "./dist/portfolio-frontend"
+          publish-dir: "./dist/developer-portfolio"
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
