@@ -38,8 +38,11 @@ jobs:
         path: './dist/developer-portfolio'
       
     - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v2
+      run: |
+        npm install -g angular-cli-ghpages
+        ng deploy --base-href=/${{ github.event.repository.name }}/ --name="GitHub Actions" --email=actions@github.com
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v2.0
