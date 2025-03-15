@@ -20,14 +20,7 @@ jobs:
       run: npm ci
       
     - name: Build
-      run: npm run build -- --prod
-      
-    # Use correct versions for artifact upload
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: production-build
-        path: ./dist/developer-portfolio
+      run: npm run build --prod
     
     # Deploy to Netlify only
     - name: Deploy to Netlify
