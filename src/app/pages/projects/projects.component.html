@@ -1,0 +1,316 @@
+<div class="projects-container">
+  <!-- Header Section -->
+  <div class="projects-header">
+    <h1 class="main-title">My Projects</h1>
+    <p class="subtitle">Explore my latest work and contributions</p>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <mat-icon class="stat-icon">work</mat-icon>
+        <div class="stat-content">
+          <span class="stat-number">{{ totalProjects$ | async }}</span>
+          <span class="stat-label">Total Projects</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon class="stat-icon">code</mat-icon>
+        <div class="stat-content">
+          <span class="stat-number">{{ uniqueTechnologies$ | async }}</span>
+          <span class="stat-label">Technologies</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon class="stat-icon">visibility</mat-icon>
+        <div class="stat-content">
+          <span class="stat-number">{{ totalViews$ | async }}</span>
+          <span class="stat-label">Total Views</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon class="stat-icon">favorite</mat-icon>
+        <div class="stat-content">
+          <span class="stat-number">{{ totalLikes$ | async }}</span>
+          <span class="stat-label">Total Likes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="filters-section">
+    <div class="search-bar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search projects</mat-label>
+        <input
+          matInput
+          [value]="searchTerm$ | async"
+          (input)="onSearchChange($event)"
+          placeholder="Search by name, technology, or description"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="filter-controls">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select
+          [value]="selectedCategory$ | async"
+          (selectionChange)="onCategoryChange($event)"
+        >
+          <mat-option value="">All Categories</mat-option>
+          <mat-option value="web-app">Web Applications</mat-option>
+          <mat-option value="mobile-app">Mobile Apps</mat-option>
+          <mat-option value="api">APIs</mat-option>
+          <mat-option value="library">Libraries</mat-option>
+          <mat-option value="tool">Tools</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select
+          [value]="selectedStatus$ | async"
+          (selectionChange)="onStatusChange($event)"
+        >
+          <mat-option value="">All Status</mat-option>
+          <mat-option value="completed">Completed</mat-option>
+          <mat-option value="in-progress">In Progress</mat-option>
+          <mat-option value="planned">Planned</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="toggle-controls">
+        <mat-slide-toggle
+          [ngModel]="showFeaturedOnly$ | async"
+          (change)="onFeaturedToggle($event)"
+        >
+          Featured Only
+        </mat-slide-toggle>
+        <mat-slide-toggle
+          [(ngModel)]="gridView"
+          (change)="onViewToggle($event)"
+        >
+          {{ gridView() ? "Grid View" : "List View" }}
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Projects Carousel -->
+  @if((featuredProjects$ | async)!.length > 0) {
+  <div class="featured-section">
+    <h2>Featured Projects</h2>
+    <div class="featured-carousel">
+      @for(project of (featuredProjects$ | async);track $index) {
+      <div class="featured-project">
+        <div class="featured-card" (click)="openProjectDetail(project)">
+          <div class="featured-image">
+            <img
+              [src]="project.images[0] || '/assets/default-project.jpg'"
+              [alt]="project.title"
+            />
+            <div class="featured-overlay">
+              <h3>{{ project.title }}</h3>
+              <p>{{ project.description }}</p>
+              <div class="featured-actions">
+                <button mat-raised-button color="primary">
+                  <mat-icon>visibility</mat-icon>
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Projects Grid/List -->
+  <div class="projects-section">
+    <div class="projects-header-actions">
+      <h2>All Projects ({{ (filteredProjects$ | async)?.length }})</h2>
+      <div class="sort-controls">
+        <mat-form-field appearance="outline">
+          <mat-label>Sort by</mat-label>
+          <mat-select
+            [value]="sortBy$ | async"
+            (selectionChange)="onSortChange($event)"
+          >
+            <mat-option value="date">Date</mat-option>
+            <mat-option value="name">Name</mat-option>
+            <mat-option value="views">Views</mat-option>
+            <mat-option value="likes">Likes</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div
+      class="projects-grid"
+      [class.list-view]="!gridView()"
+      [class.grid-view]="gridView()"
+    >
+      @for( project of (filteredProjects$ | async); track $index) {
+      <div class="project-card">
+        <mat-card class="project-mat-card" (click)="openProjectDetail(project)">
+          <!-- Project Image -->
+          <div class="project-image-container">
+            <img
+              mat-card-image
+              [src]="project.images[0] || '/assets/default-project.jpg'"
+              [alt]="project.title"
+            />
+            <div class="project-status-badge" [class]="project.status">
+              {{ getStatusLabel(project.status) }}
+            </div>
+            <div class="project-overlay">
+              <div class="project-actions">
+                @if(project.demoUrl) {
+                <button
+                  mat-mini-fab
+                  color="primary"
+                  (click)="openDemo(project, $event)"
+                >
+                  <mat-icon>launch</mat-icon>
+                </button>
+                } @if(project.githubUrl) {
+                <button
+                  mat-mini-fab
+                  color="accent"
+                  (click)="openGithub(project, $event)"
+                >
+                  <mat-icon>code</mat-icon>
+                </button>
+                }
+              </div>
+            </div>
+          </div>
+
+          <mat-card-header>
+            <mat-card-title>{{ project.title }}</mat-card-title>
+            <mat-card-subtitle>{{
+              project.category | titlecase
+            }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="project-description">{{ project.description }}</p>
+
+            <!-- Technologies -->
+            <div class="technologies-section">
+              <mat-chip-set>
+                @for(tech of project.technologies.slice(0, 4); track $index) {
+                <mat-chip>
+                  {{ tech }}
+                </mat-chip>
+                } @if(project.technologies.length > 4) {
+                <mat-chip class="more-chip">
+                  +{{ project.technologies.length - 4 }} more
+                </mat-chip>
+                }
+              </mat-chip-set>
+            </div>
+
+            <!-- Project Metrics -->
+            @if(project.metrics) {
+            <div class="project-metrics">
+              @if(project.metrics.performanceImprovement) {
+              <div class="metric">
+                <mat-icon>speed</mat-icon>
+                <span>{{ project.metrics.performanceImprovement }}</span>
+              </div>
+              } @if(project.metrics.testCoverage) {
+              <div class="metric">
+                <mat-icon>verified</mat-icon>
+                <span>{{ project.metrics.testCoverage }} coverage</span>
+              </div>
+              }
+            </div>
+            }
+
+            <!-- Project Stats -->
+            <div class="project-stats">
+              <div class="stat">
+                <mat-icon>visibility</mat-icon>
+                <span>{{ project.views }}</span>
+              </div>
+              <div class="stat">
+                <mat-icon>favorite</mat-icon>
+                <span>{{ project.likes }}</span>
+              </div>
+              @if(project.teamSize) {
+              <div class="stat">
+                <mat-icon>group</mat-icon>
+                <span>{{ project.teamSize }}</span>
+              </div>
+              }
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button
+              mat-button
+              color="primary"
+              (click)="openProjectDetail(project)"
+            >
+              <mat-icon>info</mat-icon>
+              Details
+            </button>
+            @if(project.demoUrl) {
+            <button
+              mat-button
+              color="accent"
+              (click)="openDemo(project, $event)"
+            >
+              <mat-icon>launch</mat-icon>
+              Demo
+            </button>
+            }
+            <button
+              mat-icon-button
+              (click)="likeProject(project, $event)"
+              [class.liked]="project.liked"
+            >
+              <mat-icon>{{
+                project.liked ? "favorite" : "favorite_border"
+              }}</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      }
+    </div>
+
+    <!-- Empty State -->
+    @if((filteredProjects$ | async)?.length === 0) {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">work_off</mat-icon>
+      <h3>No projects found</h3>
+      <p>Try adjusting your filters or search terms</p>
+      <button mat-raised-button color="primary" (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+    }
+  </div>
+
+  <!-- Load More Button -->
+  @if((hasMoreProjects$ | async )) {
+  <div class="load-more-section">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadMoreProjects()"
+      [disabled]="(loading$ | async)"
+    >
+      @if((loading$ | async)){<mat-icon>hourglass_empty</mat-icon>}
+      @if(!(loading$ | async)){<mat-icon>expand_more</mat-icon>}
+      {{ (loading$ | async) ? "Loading..." : "Load More Projects" }}
+    </button>
+  </div>
+  }
+</div>

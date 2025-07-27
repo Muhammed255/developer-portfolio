@@ -1,0 +1,78 @@
+<mat-card class="blog-card" [class.featured]="featured" (click)="onCardClick()">
+  @if(post.coverImage) {
+  <div class="card-image">
+    <img [src]="post.coverImage" [alt]="post.title" />
+    @if(featured) {
+    <div class="image-overlay">
+      <mat-chip class="featured-badge">
+        <mat-icon>star</mat-icon>
+        Featured
+      </mat-chip>
+    </div>
+    }
+  </div>
+  }
+
+  <mat-card-header>
+    <mat-card-title [class.featured-title]="featured">
+      {{ post.title }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      <div class="post-meta">
+        <span class="publish-date">
+          <mat-icon>calendar_today</mat-icon>
+          {{ formatDate(post.publishDate) }}
+        </span>
+        <span class="read-time">
+          <mat-icon>schedule</mat-icon>
+          {{ post.readTime }} min read
+        </span>
+        <span class="category">
+          <mat-icon>folder</mat-icon>
+          {{ post.category }}
+        </span>
+      </div>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p class="excerpt">{{ post.excerpt }}</p>
+
+    @if(post.tags.length > 0) {
+
+    <div class="tags">
+      <mat-chip-listbox>
+        @for(tag of post.tags.slice(0, 3); track $index) {
+        <mat-chip-option disabled>
+          {{ tag }}
+        </mat-chip-option>
+        } @if(post.tags.length > 3) {
+        <mat-chip-option disabled class="more-tags">
+          +{{ post.tags.length - 3 }}
+        </mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </div>
+    }
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="card-actions">
+      <div class="engagement">
+        <span class="likes">
+          <mat-icon>favorite</mat-icon>
+          {{ post.likes }}
+        </span>
+        <span class="views">
+          <mat-icon>visibility</mat-icon>
+          {{ post.views }}
+        </span>
+      </div>
+
+      <button mat-button color="primary" class="read-more">
+        Read More
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

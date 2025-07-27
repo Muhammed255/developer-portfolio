@@ -1,0 +1,287 @@
+<div class="project-dialog-container">
+  <mat-dialog-content class="dialog-content">
+    <!-- Header Section -->
+    <div class="project-header">
+      <div class="header-content">
+        <div class="title-section">
+          <h1 mat-dialog-title class="project-title">
+            {{ data.project.title }}
+          </h1>
+          <div class="project-meta">
+            <mat-chip-set>
+              @if(data.project.status) {
+              <mat-chip [color]="getStatusColor(data.project!.status)" selected>
+                <mat-icon>{{ getStatusIcon(data.project!.status) }}</mat-icon>
+                {{ data.project!.status | titlecase }}
+              </mat-chip>
+              }
+              <mat-chip color="accent" selected>
+                <mat-icon>category</mat-icon>
+                {{ data.project!.category | titlecase }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+        <button mat-icon-button mat-dialog-close class="close-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Image Gallery -->
+    @if(data.project!.images.length) {
+    <div class="image-gallery">
+      <div class="main-image-container">
+        <img
+          [src]="selectedImage"
+          [alt]="data.project!.title"
+          class="main-image"
+        />
+        @if(data.project!.images!.length > 1) {
+        <div class="image-nav">
+          <button
+            mat-icon-button
+            (click)="previousImage()"
+            [disabled]="currentImageIndex === 0"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <span class="image-counter"
+            >{{ currentImageIndex + 1 }} /
+            {{ data.project!.images.length }}</span
+          >
+          <button
+            mat-icon-button
+            (click)="nextImage()"
+            [disabled]="currentImageIndex === data.project!.images!.length - 1"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+        }
+      </div>
+      @if(data.project!.images!.length > 1) {
+      <div class="thumbnail-strip">
+        @for(image of data.project!.images; track $index) {
+        <img
+          [src]="image"
+          [alt]="data.project!.title + ' - Image ' + ($index + 1)"
+          class="thumbnail"
+          [class.active]="$index === currentImageIndex"
+          (click)="selectImage($index)"
+        />
+        }
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Project Info Tabs -->
+    <mat-tab-group class="project-tabs" animationDuration="300ms">
+      <!-- Overview Tab -->
+      <mat-tab label="Overview">
+        <div class="tab-content">
+          <div class="description-section">
+            <p class="short-description">{{ data.project!.description }}</p>
+            @if(data.project!.longDescription) {
+            <p class="long-description">
+              {{ data.project!.longDescription }}
+            </p>
+            }
+          </div>
+
+          <div class="info-grid">
+            @if(data.project!.startDate) {
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>event</mat-icon>
+                <mat-card-title>Duration</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>
+                  {{
+                    formatDateRange(
+                      data.project!.startDate,
+                      data.project!.endDate
+                    )
+                  }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            } @if(data.project!.teamSize) {
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>group</mat-icon>
+                <mat-card-title>Team Size</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>
+                  {{ data.project!.teamSize }}
+                  {{ data.project!.teamSize === 1 ? "member" : "members" }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            } @if(data.project!.myRole) {
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>person</mat-icon>
+                <mat-card-title>My Role</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ data.project!.myRole }}</p>
+              </mat-card-content>
+            </mat-card>
+            }
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Technologies Tab -->
+      <mat-tab label="Technologies">
+        <div class="tab-content">
+          <div class="tech-grid">
+            <mat-chip-set>
+              @for(tech of data.project!.technologies; track $index) {
+              <mat-chip color="primary" selected>
+                {{ tech }}
+              </mat-chip>
+              }
+            </mat-chip-set>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Challenges & Solutions Tab -->
+      @if(data.project!.challenges?.length || data.project!.solutions?.length) {
+      <mat-tab label="Development">
+        <div class="tab-content">
+          <div class="challenges-solutions">
+            @if(data.project!.challenges?.length) {
+            <div class="section">
+              <h3>
+                <mat-icon>error_outline</mat-icon>
+                Challenges
+              </h3>
+              <ul class="challenge-list">
+                @for(challenge of data.project!.challenges; track $index){
+                <li>{{ challenge }}</li>
+                }
+              </ul>
+            </div>
+            } @if(data.project!.solutions?.length) {
+            <div class="section">
+              <h3>
+                <mat-icon>lightbulb_outline</mat-icon>
+                Solutions
+              </h3>
+              <ul class="solution-list">
+                @for(solution of data.project!.solutions; track $index){
+                <li>{{ solution }}</li>
+                }
+              </ul>
+            </div>
+            }
+          </div>
+        </div>
+      </mat-tab>
+      }
+
+      <!-- Metrics Tab -->
+      @if(data.project!.metrics) {
+      <mat-tab label="Results">
+        <div class="tab-content">
+          <div class="metrics-grid">
+            @if(data.project!.metrics!.performanceImprovement) {
+            <mat-card class="metric-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar color="primary">speed</mat-icon>
+                <mat-card-title>Performance</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="metric-value">
+                  {{ data.project!.metrics!.performanceImprovement }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            } @if(data.project!.metrics!.userGrowth) {
+            <mat-card class="metric-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar color="accent">trending_up</mat-icon>
+                <mat-card-title>User Growth</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="metric-value">
+                  {{ data.project!.metrics!.userGrowth }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            } @if(data.project!.metrics!.codeQuality) {
+            <mat-card class="metric-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar color="primary">code</mat-icon>
+                <mat-card-title>Code Quality</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="metric-value">
+                  {{ data.project!.metrics!.codeQuality }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            } @if(data.project!.metrics!.testCoverage) {
+            <mat-card class="metric-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar color="accent">verified</mat-icon>
+                <mat-card-title>Test Coverage</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="metric-value">
+                  {{ data.project!.metrics!.testCoverage }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            }
+          </div>
+        </div>
+      </mat-tab>
+      }
+    </mat-tab-group>
+  </mat-dialog-content>
+
+  <!-- Dialog Actions -->
+  <mat-dialog-actions class="dialog-actions">
+    <div class="project-stats">
+      <span class="stat">
+        <mat-icon>favorite</mat-icon>
+        {{ data.project!.likes }}
+      </span>
+      <span class="stat">
+        <mat-icon>visibility</mat-icon>
+        {{ data.project!.views }}
+      </span>
+    </div>
+
+    <div class="action-buttons">
+      @if(data.project!.githubUrl) {
+      <a
+        mat-stroked-button
+        color="primary"
+        [href]="data.project!.githubUrl"
+        target="_blank"
+      >
+        <mat-icon>code</mat-icon>
+        View Code
+      </a>
+      } @if(data.project!.demoUrl) {
+      <a
+        mat-raised-button
+        color="primary"
+        [href]="data.project!.demoUrl"
+        target="_blank"
+      >
+        <mat-icon>launch</mat-icon>
+        Live Demo
+      </a>
+      }
+    </div>
+  </mat-dialog-actions>
+</div>

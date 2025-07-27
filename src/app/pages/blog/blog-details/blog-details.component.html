@@ -1,0 +1,99 @@
+@if((post$ | async); as post) {
+<div class="blog-detail-container">
+  <div class="blog-header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="header-content">
+      <h1>{{ post.title }}</h1>
+
+      <div class="post-meta">
+        <div class="meta-info">
+          <span class="author">
+            <mat-icon>person</mat-icon>
+            {{ post.author }}
+          </span>
+          <span class="publish-date">
+            <mat-icon>calendar_today</mat-icon>
+            {{ formatDate(post.publishDate) }}
+          </span>
+          <span class="read-time">
+            <mat-icon>schedule</mat-icon>
+            {{ post.readTime }} min read
+          </span>
+          <span class="category">
+            <mat-icon>folder</mat-icon>
+            {{ post.category }}
+          </span>
+        </div>
+
+        <div class="engagement">
+          <button
+            mat-icon-button
+            (click)="onLike(post)"
+            [matTooltip]="'Like this post'"
+            class="like-button"
+          >
+            <mat-icon [class.liked]="post.likes > 0">favorite</mat-icon>
+            <span>{{ post.likes }}</span>
+          </button>
+
+          <span class="views">
+            <mat-icon>visibility</mat-icon>
+            {{ post.views }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if(post.coverImage) {
+  <div class="cover-image">
+    <img [src]="post.coverImage" [alt]="post.title" />
+  </div>
+  }
+
+  <mat-card class="content-card">
+    <mat-card-content>
+      <div class="content" [innerHTML]="post.content"></div>
+    </mat-card-content>
+  </mat-card>
+
+  @if(post.tags.length > 0) {
+  <div class="tags-section">
+    <h3>Tags</h3>
+    <mat-chip-listbox>
+      @for(tag of post.tags; track $index) {
+      <mat-chip-option disabled>
+        {{ tag }}
+      </mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
+  }
+
+  <mat-divider></mat-divider>
+
+  <div class="post-actions">
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Blog
+    </button>
+
+    <div class="share-buttons">
+      <button
+        mat-icon-button
+        matTooltip="Share on Twitter"
+        (click)="shareOnTwitter(post)"
+      >
+        <mat-icon>share</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Copy link" (click)="copyLink()">
+        <mat-icon>link</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,360 @@
+<div class="blog-container">
+  <!-- Loading State -->
+  @if(loading$ | async) {
+  <div class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading blog posts...</p>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if(error$ | async; as error) {
+  <div class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="refreshBlog()">
+      Retry
+    </button>
+  </div>
+  }
+
+  <!-- Main Content -->
+  @if(!(loading$ | async) && !(error$ | async)) {
+  <!-- Blog Header -->
+  <div class="blog-header">
+    <h2>Blog & Articles</h2>
+    <p>Thoughts, tutorials, and insights from my development journey</p>
+
+    <!-- Blog Stats -->
+    @if(blogStats$ | async; as stats) {
+    <div class="blog-stats">
+      <div class="posts-grid">
+        @for(post of (posts$ | async); track trackByPost($index, post)) {
+        <mat-card class="post-card" (click)="onPostClick(post)">
+          @if(post.coverImage) {
+          <div class="post-image">
+            <img class="post-cover" [src]="post.coverImage" [alt]="post.title" />
+            <div class="post-overlay">
+              <mat-chip
+                class="category-chip"
+                [style.background-color]="getCategoryColor(post.category)"
+              >
+                {{ post.category }}
+              </mat-chip>
+              @if(post.featured) {
+              <mat-chip class="featured-badge" color="accent">
+                <mat-icon>star</mat-icon>
+                Featured
+              </mat-chip>
+              }
+            </div>
+          </div>
+          }
+
+          <mat-card-header>
+            <mat-card-title>{{ post.title }}</mat-card-title>
+            <mat-card-subtitle>
+              <div class="post-meta">
+                <span class="author">{{ post.author }}</span>
+                <span class="separator">•</span>
+                <span class="date">{{ formatDate(post.publishDate) }}</span>
+                <span class="separator">•</span>
+                <span class="read-time">{{
+                  getReadTimeText(post.readTime)
+                }}</span>
+              </div>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="post-excerpt">{{ truncateText(post.excerpt, 120) }}</p>
+
+            <div class="post-tags">
+              @for(tag of post.tags.slice(0, 4); track $index) {
+              <mat-chip
+                class="tag-chip"
+                (click)="onTagChange(tag); $event.stopPropagation()"
+              >
+                {{ tag }}
+              </mat-chip>
+              } @if(post.tags.length > 4) {
+              <mat-chip class="more-tags">
+                +{{ post.tags.length - 4 }} more
+              </mat-chip>
+              }
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <div class="post-engagement">
+              <button
+                mat-icon-button
+                (click)="onLikePost(post, $event)"
+                [attr.aria-label]="'Like post: ' + post.title"
+              >
+                <mat-icon>favorite_border</mat-icon>
+                <span>{{ post.likes }}</span>
+              </button>
+
+              <div class="views-count">
+                <mat-icon>visibility</mat-icon>
+                <span>{{ post.views }}</span>
+              </div>
+            </div>
+
+            <button mat-button color="primary">
+              Read Article
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+        }
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Load More Button (for future pagination) -->
+  @if(posts$ | async; as posts) { @if(posts.length >= 6) {
+  <div class="load-more-section">
+    <button mat-stroked-button color="primary" disabled>
+      <mat-icon>expand_more</mat-icon>
+      Load More Posts (Coming Soon)
+    </button>
+  </div>
+  } }
+
+  <!-- Blog Footer/CTA -->
+  <div class="blog-footer">
+    <mat-card class="newsletter-card">
+      <mat-card-content>
+        <div class="newsletter-content">
+          <mat-icon>mail</mat-icon>
+          <div class="newsletter-text">
+            <h4>Stay Updated</h4>
+            <p>
+              Get notified when I publish new articles about web development,
+              programming tips, and tech insights.
+            </p>
+          </div>
+          <button mat-raised-button color="primary" routerLink="/contact">
+            Subscribe to Newsletter
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="blog-navigation">
+      <button mat-stroked-button routerLink="/projects">
+        <mat-icon>work</mat-icon>
+        View My Projects
+      </button>
+      <button mat-stroked-button routerLink="/skills">
+        <mat-icon>code</mat-icon>
+        My Skills
+      </button>
+      <button mat-stroked-button routerLink="/contact">
+        <mat-icon>person</mat-icon>
+        Get In Touch
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+  @for (stat of (stats | async); track $index) {
+    <mat-card class="stat-card mat-elevation-z3">
+      <mat-card-header>
+        <div mat-card-avatar class="stat-icon">
+          <mat-icon>{{ stat.icon }}</mat-icon>
+        </div>
+        <mat-card-title>{{ stat.value }}</mat-card-title>
+        <mat-card-subtitle>{{ stat.label }}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+  }
+</div>
+
+
+  <!-- </div> -->
+  }
+</div>
+
+<!-- Blog Controls -->
+<div class="blog-controls">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search articles</mat-label>
+    <input
+      matInput
+      [value]="searchTerm$ | async"
+      (input)="searchTerm.set($any($event.target).value)"
+      placeholder="Search by title, content, or tags"
+    />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filter-field">
+    <mat-label>Category</mat-label>
+    <mat-select
+      [value]="selectedCategory()"
+      (selectionChange)="onCategoryChange($event.value)"
+    >
+      <mat-option value="">All Categories</mat-option>
+      @for(category of categories$ | async; track $index) {
+      <mat-option [value]="category">
+        <mat-chip
+          [style.background-color]="getCategoryColor(category)"
+          [style.color]="'white'"
+        >
+          {{ category }}
+        </mat-chip>
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filter-field">
+    <mat-label>Tag</mat-label>
+    <mat-select
+      [value]="selectedTag()"
+      (selectionChange)="onTagChange($event.value)"
+    >
+      <mat-option value="">All Tags</mat-option>
+      @for(tag of tags$ | async; track $index) {
+      <mat-option [value]="tag">
+        {{ tag }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="filter-actions">
+    <button mat-stroked-button (click)="clearFilters()">
+      <mat-icon>clear</mat-icon>
+      Clear Filters
+    </button>
+    <button mat-stroked-button (click)="showFeaturedOnly()">
+      <mat-icon>star</mat-icon>
+      Featured Only
+    </button>
+  </div>
+</div>
+
+<!-- Active Filters Display -->
+@if(filters$ | async; as filters) { @if(filters.searchTerm || filters.category
+|| filters.tag || filters.featured) {
+<div class="active-filters">
+  <span class="filters-label">Active filters:</span>
+  @if(filters.searchTerm) {
+  <mat-chip class="filter-chip">
+    Search: "{{ filters.searchTerm }}"
+    <mat-icon matChipRemove (click)="searchTerm.set('')">cancel</mat-icon>
+  </mat-chip>
+  } @if(filters.category) {
+  <mat-chip
+    class="filter-chip"
+    [style.background-color]="getCategoryColor(filters.category)"
+  >
+    {{ filters.category }}
+    <mat-icon matChipRemove (click)="onCategoryChange('')">cancel</mat-icon>
+  </mat-chip>
+  } @if(filters.tag) {
+  <mat-chip class="filter-chip">
+    {{ filters.tag }}
+    <mat-icon matChipRemove (click)="onTagChange('')">cancel</mat-icon>
+  </mat-chip>
+  } @if(filters.featured) {
+  <mat-chip class="filter-chip" color="accent">
+    Featured Only
+    <mat-icon matChipRemove (click)="showAllPosts()">cancel</mat-icon>
+  </mat-chip>
+  }
+</div>
+} }
+
+<!-- Featured Posts Section -->
+@if(featuredPosts$ | async; as featuredPosts) { @if(featuredPosts.length > 0 &&
+!(filters$ | async)?.featured) {
+<div class="featured-posts">
+  <h3>
+    <mat-icon>star</mat-icon>
+    Featured Articles
+  </h3>
+  <div class="featured-grid">
+    @for(post of featuredPosts; track trackByPost($index, post)) {
+    <mat-card class="featured-post-card" (click)="onPostClick(post)">
+      @if(post.coverImage) {
+      <div class="post-image">
+        <img class="post-cover" [src]="post.coverImage" [alt]="post.title" />
+        <div class="post-overlay">
+          <mat-chip
+            class="category-chip"
+            [style.background-color]="getCategoryColor(post.category)"
+          >
+            {{ post.category }}
+          </mat-chip>
+        </div>
+      </div>
+      }
+      <mat-card-header>
+        <mat-card-title>{{ post.title }}</mat-card-title>
+        <mat-card-subtitle>
+          <span>{{ formatDate(post.publishDate) }}</span>
+          <span class="separator">•</span>
+          <span>{{ getReadTimeText(post.readTime) }}</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ truncateText(post.excerpt, 150) }}</p>
+        <div class="post-tags">
+          @for(tag of post.tags.slice(0, 3); track $index) {
+          <mat-chip class="tag-chip">{{ tag }}</mat-chip>
+          }
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <div class="post-stats">
+          <button mat-icon-button (click)="onLikePost(post, $event)">
+            <mat-icon>favorite_border</mat-icon>
+            <span>{{ post.likes }}</span>
+          </button>
+          <div class="views">
+            <mat-icon>visibility</mat-icon>
+            <span>{{ post.views }}</span>
+          </div>
+        </div>
+        <button mat-button color="primary">
+          Read More
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    }
+  </div>
+</div>
+} }
+
+<!-- All Posts Section -->
+<div class="all-posts">
+  <div class="section-header">
+    <h3>
+      @if((filters$ | async)?.featured) { Featured Articles } @else { All
+      Articles }
+    </h3>
+    @if(posts$ | async; as posts) {
+    <span class="posts-count">{{ posts.length }} articles found</span>
+    }
+  </div>
+
+  @if(posts$ | async; as posts) { @if(posts.length === 0) {
+  <div class="no-posts">
+    <mat-icon>article</mat-icon>
+    <h4>No articles found</h4>
+    <p>Try adjusting your search criteria or clearing filters.</p>
+    <button mat-raised-button color="primary" (click)="clearFilters()">
+      Clear Filters
+    </button>
+  </div>
+  } @else {
+  <div class=""></div>
+  }}
+</div>

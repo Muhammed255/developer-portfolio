@@ -1,0 +1,431 @@
+@if(loading$ | async) {
+  <mat-spinner style="margin: auto;"></mat-spinner>
+}
+@if(error$ | async; as error) {
+  <div>{{ error }}</div>
+}
+
+<div class="experience-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Professional Experience</h1>
+    <p class="page-subtitle">
+      My journey through different roles and companies
+    </p>
+  </div>
+
+  <!-- Experience Stats -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon color="primary">work</mat-icon>
+          </div>
+          <h3>{{ totalExpYears$ | async }}+</h3>
+          <p>Years Experience</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon color="primary">business</mat-icon>
+          </div>
+          <h3>{{ (experiences$ | async )?.length }}</h3>
+          <p>Companies</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon color="primary">code</mat-icon>
+          </div>
+          <h3>{{ (allTech$ | async)?.length }}+</h3>
+          <p>Technologies</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon color="primary">emoji_events</mat-icon>
+          </div>
+          <h3>{{ totalAchievements$ | async }}+</h3>
+          <p>Achievements</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- View Controls -->
+  <div class="controls-section">
+    <mat-card class="controls-card">
+      <mat-card-content>
+        <div class="controls-container">
+          <div class="filter-controls">
+            <form [formGroup]="filterExperienceFormGroup">
+              <mat-form-field appearance="outline">
+                <mat-label>Filter by type</mat-label>
+                <mat-select
+                  (selectionChange)="onFilterChange()"
+                  formControlName="filterType"
+                >
+                  <mat-option value="">All Types</mat-option>
+                  @for(type of experienceTypes; track $index) {
+                  <mat-option [value]="type.value">
+                    {{ type.label }}
+                  </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Search experiences</mat-label>
+                <input
+                  matInput
+                  formControlName="searchExperience"
+                  (input)="onSearchChange($event)"
+                  placeholder="Company, role, technology..."
+                />
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+            </form>
+          </div>
+
+          <div class="view-controls">
+            <mat-button-toggle-group
+              [(ngModel)]="viewMode"
+              (change)="onViewModeChange()"
+            >
+              <mat-button-toggle value="timeline">
+                <mat-icon>timeline</mat-icon>
+                Timeline
+              </mat-button-toggle>
+              <mat-button-toggle value="cards">
+                <mat-icon>view_agenda</mat-icon>
+                Cards
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Loading State -->
+  @if(loading$ | async) {
+  <div class="loading-container">
+    <mat-progress-spinner></mat-progress-spinner>
+    <p>Loading experience...</p>
+  </div>
+  }
+
+  <!-- Experience Content -->
+  @if(!(loading$ | async)){
+  <div class="experience-content">
+    <!-- Timeline View -->
+    @if(viewMode === 'timeline') {
+    <div class="timeline-view">
+      <div class="timeline-container">
+        @for(experience of (experiences$ | async); track $index) {
+        <div class="timeline-item" [@slideInUp]>
+          <!-- Timeline Node -->
+          <div class="timeline-node">
+            <div
+              class="node-circle"
+              [class]="getExperienceTypeClass(experience.type)"
+            >
+              <mat-icon>{{ getExperienceIcon(experience.type) }}</mat-icon>
+            </div>
+            @if($index < (experiences$ | async)!.length - 1) {
+            <div class="node-line"></div>
+            }
+          </div>
+
+          <!-- Experience Card -->
+          <mat-card class="timeline-card" [class.current]="!experience.endDate">
+            <div class="card-header">
+              <div class="company-info">
+                @if(experience.companyLogo) {
+                <div class="company-logo">
+                  <img
+                    [src]="experience.companyLogo"
+                    [alt]="experience.company"
+                  />
+                </div>
+                } @if(!experience.companyLogo) {
+                <div class="company-logo fallback">
+                  <span>{{ experience.company.charAt(0) }}</span>
+                </div>
+                }
+                <div class="company-details">
+                  <h3 class="position-title">{{ experience.position }}</h3>
+                  <h4 class="company-name">
+                    @if(experience.companyWebsite) {
+                    <a
+                      [href]="experience.companyWebsite"
+                      target="_blank"
+                      class="company-link"
+                    >
+                      {{ experience.company }}
+                      <mat-icon>launch</mat-icon>
+                    </a>
+                    } @if(!experience.companyWebsite) {
+                    <span>{{ experience.company }}</span>
+                    }
+                  </h4>
+                  <div class="meta-info">
+                    <span class="duration">
+                      <mat-icon>schedule</mat-icon>
+                      {{
+                        formatDuration(experience.startDate, experience.endDate)
+                      }}
+                    </span>
+                    <span class="location">
+                      <mat-icon>location_on</mat-icon>
+                      {{ experience.location }}
+                    </span>
+                    <span class="type">
+                      <mat-chip
+                        [color]="getTypeColor(experience.type)"
+                        selected
+                      >
+                        {{ experience.type | titlecase }}
+                      </mat-chip>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              @if(!experience.endDate) {
+              <div class="experience-badge">
+                <mat-chip color="accent" selected>
+                  <mat-icon>star</mat-icon>
+                  Current
+                </mat-chip>
+              </div>
+              }
+            </div>
+
+            <mat-card-content>
+              <div class="description">
+                <p>{{ experience.description }}</p>
+              </div>
+
+              @if(experience.achievements.length) {
+              <div class="achievements">
+                <h5>Key Achievements:</h5>
+                <ul class="achievements-list">
+                  @for(achievement of experience.achievements; track $index) {
+                  <li>
+                    <mat-icon>check_circle</mat-icon>
+                    {{ achievement }}
+                  </li>
+                  }
+                </ul>
+              </div>
+              } @if(experience.technologies.length) {
+              <div class="technologies">
+                <h5>Technologies Used:</h5>
+                <mat-chip-set>
+                  @for(tech of experience.technologies; track $index) {
+                  <mat-chip color="primary" selected>
+                    {{ tech }}
+                  </mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+              }
+            </mat-card-content>
+          </mat-card>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- Cards View -->
+    @if(viewMode === 'cards') {
+    <div class="cards-view">
+      <div class="cards-grid">
+        @for(experience of (experiences$ | async); track $index) {
+        <mat-card
+          class="experience-card"
+          [class.current]="!experience.endDate"
+          [@slideInUp]
+        >
+          @if(experience.companyLogo) {
+          <div class="card-image">
+            <img [src]="experience.companyLogo" [alt]="experience.company" />
+          </div>
+          } @if(!experience.companyLogo) {
+          <div class="card-image fallback">
+            <div class="company-initial">
+              {{ experience.company.charAt(0) }}
+            </div>
+          </div>
+          }
+
+          <mat-card-header>
+            <mat-card-title>{{ experience.position }}</mat-card-title>
+            <mat-card-subtitle>
+              @if(experience.companyWebsite) {
+              <a
+                [href]="experience.companyWebsite"
+                target="_blank"
+                class="company-link"
+              >
+                {{ experience.company }}
+              </a>
+              } @if(!experience.companyWebsite) {
+              <span>{{ experience.company }}</span>
+              }
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="card-meta">
+              <div class="meta-item">
+                <mat-icon>schedule</mat-icon>
+                <span>{{
+                  formatDuration(experience.startDate, experience.endDate)
+                }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>location_on</mat-icon>
+                <span>{{ experience.location }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-chip [color]="getTypeColor(experience.type)" selected>
+                  {{ experience.type | titlecase }}
+                </mat-chip>
+              </div>
+            </div>
+
+            <p class="description">{{ experience.description }}</p>
+
+            @if(experience.achievements.length) {
+            <div class="achievements-preview">
+              <strong
+                >{{ experience.achievements.length }} Key Achievement{{
+                  experience.achievements.length > 1 ? "s" : ""
+                }}</strong
+              >
+              <ul class="achievements-list compact">
+                @for(achievement of experience.achievements.slice(0, 2); track
+                $index) {
+                <li>
+                  {{ achievement }}
+                </li>
+                } @if(experience.achievements.length > 2) {
+                <li class="more-achievements">
+                  +{{ experience.achievements.length - 2 }} more achievements
+                </li>
+                }
+              </ul>
+            </div>
+            } @if(experience.technologies.length) {
+            <div class="tech-preview">
+              <mat-chip-set>
+                @for(tech of experience.technologies.slice(0, 4); track $index)
+                {
+                <mat-chip>
+                  {{ tech }}
+                </mat-chip>
+                } @if(experience.technologies.length > 4) {
+                <mat-chip class="more-tech">
+                  +{{ experience.technologies.length - 4 }}
+                </mat-chip>
+                }
+              </mat-chip-set>
+            </div>
+            }
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button (click)="openExperienceDetails(experience)">
+              <mat-icon>info</mat-icon>
+              View Details
+            </button>
+            @if(experience.companyWebsite) {
+            <a mat-button [href]="experience.companyWebsite" target="_blank">
+              <mat-icon>launch</mat-icon>
+              Company Website
+            </a>
+            }
+          </mat-card-actions>
+        </mat-card>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- No Results -->
+    @if((experiences$ | async)?.length === 0) {
+    <div class="no-results">
+      <mat-icon>work_off</mat-icon>
+      <h3>No experience found</h3>
+      <p>Try adjusting your search terms or filters</p>
+      <button mat-raised-button color="primary" (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Career Summary -->
+  @if(!(loading$ | async) && (experiences$ | async)!.length > 0) {
+  <div class="summary-section">
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Career Highlights</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <mat-icon color="primary">trending_up</mat-icon>
+            <div class="highlight-content">
+              <h4>Career Growth</h4>
+              <p>
+                Progressed from {{ earliestPosition$ | async }} to
+                {{ currentPosition$ | async }}
+              </p>
+            </div>
+          </div>
+
+          <div class="highlight-item">
+            <mat-icon color="primary">language</mat-icon>
+            <div class="highlight-content">
+              <h4>Technology Stack</h4>
+              <p>
+                Expertise in
+                {{ (allTech$ | async)?.slice(0, 3)?.join(", ") }} and more
+              </p>
+            </div>
+          </div>
+
+          <div class="highlight-item">
+            <mat-icon color="primary">groups</mat-icon>
+            <div class="highlight-content">
+              <h4>Experience Types</h4>
+              <p>{{ experienceTypeCount$ | async }} different work arrangements</p>
+            </div>
+          </div>
+
+          <div class="highlight-item">
+            <mat-icon color="primary">emoji_events</mat-icon>
+            <div class="highlight-content">
+              <h4>Total Impact</h4>
+              <p>
+                {{ totalAchievements$ | async }}+ significant achievements delivered
+              </p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  }
+</div>

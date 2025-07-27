@@ -1,0 +1,84 @@
+<div class="home-container">
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Hi, I'm <span class="highlight">Mohamed Abdelazim</span>
+        </h1>
+        <h2 class="hero-subtitle">Full Stack Developer</h2>
+        <p class="hero-description">
+          A dedicated MEAN Stack Developer with 3+ years of experience building full-stack web applications. 
+          Proficient in MongoDB, Express.js, Angular, Node.js, with expertise in NestJS, PostgreSQL, Docker, and microservices architecture.
+        </p>
+
+        <div class="hero-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            class="cta-button"
+            (click)="navigateToProjects()"
+          >
+            View My Work
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="navigateToContact()"
+          >
+            Get In Touch
+            <mat-icon>email</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <div class="image-placeholder">
+          <mat-icon class="profile-icon">person</mat-icon>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quick-links-section">
+    <div class="section-header">
+      <h3>Explore My Work</h3>
+      <p>Discover what I do and how I can help you</p>
+    </div>
+
+    <div class="quick-links-grid">
+      <mat-card class="quick-link-card" (click)="navigateToProjects()">
+        <mat-card-content>
+          <mat-icon class="card-icon">work</mat-icon>
+          <h4>Projects</h4>
+          <p>Explore my latest projects and case studies</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="quick-link-card" (click)="navigateToSkills()">
+        <mat-card-content>
+          <mat-icon class="card-icon">code</mat-icon>
+          <h4>Skills</h4>
+          <p>Technologies and tools I work with</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="quick-link-card" (click)="navigateToExperience()">
+        <mat-card-content>
+          <mat-icon class="card-icon">business_center</mat-icon>
+          <h4>Experience</h4>
+          <p>My professional journey and achievements</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="quick-link-card" (click)="navigateToBlog()">
+        <mat-card-content>
+          <mat-icon class="card-icon">article</mat-icon>
+          <h4>Blog</h4>
+          <p>Thoughts, tutorials, and insights</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+</div>

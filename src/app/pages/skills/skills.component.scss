@@ -1,0 +1,473 @@
+.skills-container {
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+      background: linear-gradient(45deg, var(--primary-color, #3f51b5), var(--accent-color, #ff4081));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      font-size: 1.125rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+
+    .overview-section {
+      margin-bottom: 32px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .overview-card {
+      text-align: center;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .overview-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .overview-icon {
+      margin-bottom: 16px;
+    }
+
+    .overview-icon mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .overview-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .overview-count {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color, #3f51b5);
+      margin: 0 0 4px 0;
+    }
+
+    .overview-avg {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+
+    .controls-section {
+      margin-bottom: 32px;
+    }
+
+    .controls-card {
+      border-radius: 12px;
+    }
+
+    .controls-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 16px;
+    }
+
+    .skills-content {
+      margin-bottom: 48px;
+    }
+
+    .category-section {
+      margin-bottom: 48px;
+    }
+
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .category-count {
+      font-size: 1rem;
+      color: rgba(0, 0, 0, 0.6);
+      font-weight: 400;
+    }
+
+    .skills-grid-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-card {
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .skill-card.level-4 {
+      border-left: 4px solid #4caf50;
+    }
+
+    .skill-card.level-3 {
+      border-left: 4px solid #2196f3;
+    }
+
+    .skill-card.level-2 {
+      border-left: 4px solid #ff9800;
+    }
+
+    .skill-card.level-1 {
+      border-left: 4px solid #f44336;
+    }
+
+    .skill-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .skill-level {
+      margin-bottom: 16px;
+    }
+
+    .level-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+    }
+
+    .level-number {
+      font-weight: 600;
+      color: var(--primary-color, #3f51b5);
+    }
+
+    .skill-projects {
+      margin-bottom: 16px;
+    }
+
+    .projects-label {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 8px 0;
+    }
+
+    .project-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .project-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary-color, #3f51b5);
+    }
+
+    .more-projects {
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin-left: 4px;
+    }
+
+    .skill-certifications {
+      margin-top: 12px;
+    }
+
+    .more-cert {
+      background: rgba(0, 0, 0, 0.1) !important;
+      color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /* Chart View Styles */
+    .chart-view {
+      display: grid;
+      gap: 24px;
+    }
+
+    .chart-card {
+      border-radius: 12px;
+    }
+
+    .chart-container {
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chart-placeholder {
+      text-align: center;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .chart-placeholder mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
+
+    .chart-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .legend-card {
+      border-radius: 12px;
+    }
+
+    .legend-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .legend-header h4 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .legend-stats {
+      display: grid;
+      gap: 8px;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .stat-value {
+      font-weight: 600;
+      color: var(--primary-color, #3f51b5);
+    }
+
+    /* Timeline View Styles */
+    .timeline-view {
+      padding: 24px 0;
+    }
+
+    .timeline-container {
+      position: relative;
+    }
+
+    .timeline-year {
+      display: flex;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .year-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 32px;
+      position: relative;
+    }
+
+    .year-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-color, #3f51b5);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+    }
+
+    .year-line {
+      width: 2px;
+      height: 100px;
+      background: linear-gradient(to bottom, var(--primary-color, #3f51b5), transparent);
+      margin-top: 8px;
+    }
+
+    .timeline-year:last-child .year-line {
+      display: none;
+    }
+
+    .year-content {
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .year-content h3 {
+      margin: 0 0 16px 0;
+      font-size: 1.25rem;
+      color: var(--primary-color, #3f51b5);
+    }
+
+    .timeline-skills mat-chip {
+      margin: 4px;
+      font-weight: 500;
+    }
+
+    .skill-level-badge {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      margin-left: 8px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      margin-top: 64px;
+    }
+
+    .cta-card {
+      text-align: center;
+      padding: 32px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(63, 81, 181, 0.05), rgba(255, 64, 129, 0.05));
+    }
+
+    .cta-card h3 {
+      font-size: 1.5rem;
+      margin: 0 0 8px 0;
+      color: var(--primary-color, #3f51b5);
+    }
+
+    .cta-card p {
+      font-size: 1.125rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 24px 0;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .controls-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .filter-controls {
+        justify-content: center;
+      }
+
+      .skills-grid-items {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+
+      .chart-legend {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .skills-container {
+        padding: 16px;
+      }
+
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .overview-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .filter-controls {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .skills-grid-items {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-year {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .year-marker {
+        flex-direction: row;
+        margin-right: 0;
+        margin-bottom: 16px;
+      }
+
+      .year-line {
+        width: 100px;
+        height: 2px;
+        margin-top: 0;
+        margin-left: 8px;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta-actions button {
+        width: 200px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .year-circle {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+      }
+    }

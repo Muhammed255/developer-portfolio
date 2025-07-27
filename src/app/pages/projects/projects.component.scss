@@ -1,0 +1,499 @@
+.projects-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.projects-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: 16px;
+  background: linear-gradient(45deg, #3f51b5, #9c27b0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color, #ff000096) 0%,
+    var(--accent-color, #ffffff) 100%
+  );
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  margin-right: 16px;
+  color: #3f51b5;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.filters-section {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color, #78474761) 0%,
+    var(--accent-color, #000000) 100%
+  );
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 32px;
+}
+
+.search-bar {
+  margin-bottom: 24px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.toggle-controls {
+  display: flex;
+  gap: 24px;
+  margin-left: auto;
+}
+
+.featured-section {
+  margin-bottom: 48px;
+}
+
+.featured-section h2 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.featured-carousel {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+.featured-project {
+  min-width: 400px;
+}
+
+.featured-card {
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.featured-card:hover {
+  transform: scale(1.02);
+}
+
+.featured-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: white;
+  padding: 24px;
+}
+
+.featured-overlay h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.featured-overlay p {
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.projects-section {
+  margin-bottom: 48px;
+}
+
+.projects-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.projects-header-actions h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.projects-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.projects-grid.grid-view {
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.projects-grid.list-view {
+  grid-template-columns: 1fr;
+}
+
+.project-card {
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+.project-mat-card {
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.project-mat-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.project-image-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.project-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project-mat-card:hover .project-image-container img {
+  transform: scale(1.05);
+}
+
+.project-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.project-status-badge.completed {
+  background: #4caf50;
+  color: white;
+}
+
+.project-status-badge.in-progress {
+  background: #ff9800;
+  color: white;
+}
+
+.project-status-badge.planned {
+  background: #2196f3;
+  color: white;
+}
+
+.project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-mat-card:hover .project-overlay {
+  opacity: 1;
+}
+
+.project-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.project-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.technologies-section {
+  margin-bottom: 16px;
+}
+
+.more-chip {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.project-metrics {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.metric mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.project-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.stat mat-icon {
+  font-size: 1.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.liked {
+  color: #e91e63 !important;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  margin-bottom: 24px;
+}
+
+.load-more-section {
+  text-align: center;
+  padding: 32px;
+}
+
+/* List View Styles */
+.list-view .project-mat-card {
+  flex-direction: row;
+  height: auto;
+}
+
+.list-view .project-image-container {
+  width: 200px;
+  height: 150px;
+  flex-shrink: 0;
+}
+
+.list-view mat-card-content {
+  flex: 1;
+}
+
+/* Dark Theme */
+.dark-theme {
+  .projects-container {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat-card {
+    background: linear-gradient(
+      135deg,
+      var(--primary-color, #ff000096) 0%,
+      var(--accent-color, #ffffff) 100%
+    );
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .stat-number {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .stat-label {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .filters-section {
+    background: linear-gradient(
+      135deg,
+      var(--primary-color, #ff000096) 0%,
+      var(--accent-color, #ffffff) 100%
+    );
+  }
+
+  .projects-header-actions h2,
+  .featured-section h2 {
+    color: rgba(255, 255, 255, 0.87);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .projects-container {
+    padding: 16px;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toggle-controls {
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
+  .projects-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .featured-project {
+    min-width: 300px;
+  }
+
+  .projects-grid.grid-view {
+    grid-template-columns: 1fr;
+  }
+
+  .list-view .project-mat-card {
+    flex-direction: column;
+  }
+
+  .list-view .project-image-container {
+    width: 100%;
+    height: 200px;
+  }
+}

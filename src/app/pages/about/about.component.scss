@@ -1,0 +1,171 @@
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.hero-card .mat-mdc-card-content {
+  padding: 32px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.profile-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: white;
+}
+
+.name {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin: 0;
+  color: white;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.summary {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tab-content {
+  padding: 24px;
+}
+
+.experience-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.experience-card:hover {
+  transform: translateY(-2px);
+}
+
+.company {
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.location {
+  color: #666;
+}
+
+.duration {
+  color: #999;
+  font-style: italic;
+}
+
+.skills-card {
+  margin-bottom: 16px;
+}
+
+.skill-item {
+  margin-bottom: 16px;
+}
+
+.skill-header {
+  margin-bottom: 8px;
+}
+
+.skill-name {
+  font-weight: 500;
+}
+
+.skill-percentage {
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.skill-progress {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.project-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.project-description {
+  margin-bottom: 16px;
+  color: #666;
+}
+
+.project-section {
+  margin-bottom: 16px;
+}
+
+.project-section h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1976d2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.education-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #1976d2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 16px;
+  }
+
+  .hero-card .mat-mdc-card-content {
+    padding: 24px;
+  }
+
+  .name {
+    font-size: 2rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .profile-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+}

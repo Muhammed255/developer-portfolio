@@ -1,0 +1,287 @@
+<div class="skills-container">
+  <!-- Loading State -->
+  @if(loading$ | async) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading skills...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if(error$ | async; as error) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="retrySkills()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Main Content -->
+  @if(!(loading$ | async) && !(error$ | async)) {
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Technical Skills</h1>
+      <p class="page-subtitle">My expertise across different technologies and domains</p>
+    </div>
+
+    <!-- Skills Overview Cards -->
+    <div class="overview-section">
+      <div class="overview-grid">
+        @for(overview of skillsOverview$ | async; track $index) {
+          <mat-card class="overview-card">
+            <mat-card-content>
+              <div class="overview-icon">
+                <mat-icon [style.color]="overview.color">{{ overview.icon }}</mat-icon>
+              </div>
+              <h3>{{ overview.title }}</h3>
+              <p class="overview-count">{{ overview.count }} Skills</p>
+              <p class="overview-avg">Avg. {{ overview.avgYears }} years</p>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </div>
+
+    <!-- Filter and View Controls -->
+    <div class="controls-section">
+      <mat-card class="controls-card">
+        <mat-card-content>
+          <div class="controls-container">
+            <div class="filter-controls">
+              <mat-form-field appearance="outline">
+                <mat-label>Filter by category</mat-label>
+                <mat-select [value]="selectedCategory()" (selectionChange)="onCategoryChange($event.value)">
+                  <mat-option value="">All Categories</mat-option>
+                  @for(category of categories; track $index) {
+                    <mat-option [value]="category.value">
+                      {{ category.label }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Minimum level</mat-label>
+                <mat-select [value]="minLevel()" (selectionChange)="onMinLevelChange($event.value)">
+                  <mat-option [value]="1">Beginner</mat-option>
+                  <mat-option [value]="2">Intermediate</mat-option>
+                  <mat-option [value]="3">Advanced</mat-option>
+                  <mat-option [value]="4">Expert</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-stroked-button (click)="clearFilters()">
+                <mat-icon>clear</mat-icon>
+                Clear Filters
+              </button>
+            </div>
+
+            <div class="view-controls">
+              <mat-button-toggle-group [value]="viewMode()" (change)="onViewModeToggle($event.value)">
+                <mat-button-toggle value="grid">
+                  <mat-icon>grid_view</mat-icon>
+                  Grid
+                </mat-button-toggle>
+                <mat-button-toggle value="chart">
+                  <mat-icon>bar_chart</mat-icon>
+                  Chart
+                </mat-button-toggle>
+                <mat-button-toggle value="timeline">
+                  <mat-icon>timeline</mat-icon>
+                  Timeline
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Skills Content -->
+    <div class="skills-content">
+      <!-- Grid View -->
+      @if(viewMode() === 'grid') {
+        <div class="skills-grid">
+          @for(category of filteredSkillsByCategory$ | async; track trackByCategory($index, category)) {
+            <div class="category-section" [@slideInUp]>
+              <h2 class="category-title">
+                <mat-icon [style.color]="getCategoryColor(category.category)">
+                  {{ getCategoryIcon(category.category) }}
+                </mat-icon>
+                {{ getCategoryLabel(category.category) }}
+                <span class="category-count">({{ category.skills.length }})</span>
+              </h2>
+              
+              <div class="skills-grid-items">
+                @for(skill of category.skills; track trackBySkill($index, skill)) {
+                  <mat-card class="skill-card" [class]="'level-' + skill.level">
+                    <!-- Rest of the skill card template remains the same -->
+                    <mat-card-header>
+                      <div mat-card-avatar class="skill-avatar" [style.background-color]="skill.color || getCategoryColor(skill.category)">
+                        @if(skill.icon){<mat-icon>{{ skill.icon }}</mat-icon>}
+                        @if(!skill.icon){<span>{{ skill.name.charAt(0) }}</span>}
+                      </div>
+                      <mat-card-title>{{ skill.name }}</mat-card-title>
+                      <mat-card-subtitle>{{ skill.experience }} years experience</mat-card-subtitle>
+                    </mat-card-header>
+    
+                    <mat-card-content>
+                      <div class="skill-level">
+                        <div class="level-label">
+                          <span>{{ getLevelLabel(skill.level) }}</span>
+                          <span class="level-number">{{ skill.level }}/4</span>
+                        </div>
+                        <mat-progress-bar 
+                          mode="determinate" 
+                          [value]="(skill.level / 4) * 100"
+                          [color]="getLevelColor(skill.level)">
+                        </mat-progress-bar>
+                      </div>
+    
+                      @if(skill.projects.length) {
+                        <div class="skill-projects">
+                          <p class="projects-label">Used in {{ skill.projects.length }} projects</p>
+                          <div class="project-dots">
+                            @for(project of skill.projects.slice(0, 5); track $index) {
+                              <div class="project-dot" [matTooltip]="getProjectName(project)"></div>
+                            }
+                            @if(skill.projects.length > 5) {
+                              <span class="more-projects">+{{ skill.projects.length - 5 }} more</span>
+                            }
+                          </div>
+                        </div>
+                      }
+    
+                      @if(skill.certifications?.length) {
+                        <div class="skill-certifications">
+                          <mat-chip-set>
+                            @for(cert of skill.certifications!.slice(0, 2); track $index) {
+                              <mat-chip color="accent" selected>
+                                <mat-icon>verified</mat-icon>
+                                {{ cert }}
+                              </mat-chip>
+                            }
+                            @if(skill.certifications!.length > 2) {
+                              <mat-chip class="more-cert">
+                                +{{ skill.certifications!.length - 2 }} more
+                              </mat-chip>
+                            }
+                          </mat-chip-set>
+                        </div>
+                      }
+                    </mat-card-content>
+                  </mat-card>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Chart View -->
+      @if(viewMode() === 'chart') {
+        <div class="chart-view">
+          <mat-card class="chart-card">
+            <mat-card-header>
+              <mat-card-title>Skills Proficiency Overview</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="chart-container">
+                <div class="chart-placeholder">
+                  <mat-icon>insights</mat-icon>
+                  <p>Skills Radar Chart</p>
+                  <small>Interactive visualization showing skill levels across categories</small>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <div class="chart-legend">
+            @for(category of skillsGroupedByCategory$ | async; track $index) {
+              <mat-card class="legend-card">
+                <mat-card-content>
+                  <div class="legend-header">
+                    <mat-icon [style.color]="getCategoryColor(category.category)">
+                      {{ getCategoryIcon(category.category) }}
+                    </mat-icon>
+                    <h4>{{ getCategoryLabel(category.category) }}</h4>
+                  </div>
+                  <div class="legend-stats">
+                    <div class="stat">
+                      <span class="stat-label">Skills:</span>
+                      <span class="stat-value">{{ category.skills.length }}</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-label">Avg Level:</span>
+                      <span class="stat-value">{{ getAverageLevel(category.skills) }}/4</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-label">Total Exp:</span>
+                      <span class="stat-value">{{ getTotalExperience(category.skills) }}y</span>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Timeline View -->
+      @if(viewMode() === 'timeline') {
+        <div class="timeline-view">
+          <div class="timeline-container">
+            @for(yearGroup of skillsTimeline$ | async; track trackByYear($index, yearGroup)) {
+              <div class="timeline-year" [@slideInUp]>
+                <div class="year-marker">
+                  <div class="year-circle">{{ yearGroup.year }}</div>
+                  <div class="year-line"></div>
+                </div>
+                <div class="year-content">
+                  <h3>Skills acquired in {{ yearGroup.year }}</h3>
+                  <div class="timeline-skills">
+                    <mat-chip-set>
+                      @for(skill of yearGroup.skills; track trackBySkill($index, skill)) {
+                        <mat-chip 
+                                 [style.background-color]="getCategoryColor(skill.category)"
+                                 [style.color]="'white'">
+                          @if(skill.icon) {
+                            <mat-icon>{{ skill.icon }}</mat-icon>
+                          }
+                          {{ skill.name }}
+                          <span class="skill-level-badge">L{{ skill.level }}</span>
+                        </mat-chip>
+                      }
+                    </mat-chip-set>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <mat-card class="cta-card">
+        <mat-card-content>
+          <h3>Interested in working together?</h3>
+          <p>I'm always learning new technologies and taking on exciting challenges.</p>
+          <div class="cta-actions">
+            <button mat-raised-button color="primary" routerLink="/contact">
+              <mat-icon>mail</mat-icon>
+              Get In Touch
+            </button>
+            <button mat-stroked-button color="primary" routerLink="/projects">
+              <mat-icon>work</mat-icon>
+              View My Work
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>
