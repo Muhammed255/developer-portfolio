@@ -1,5 +1,5 @@
 [build]
-  publish = "dist/developer-portfolio"
+  publish = "dist/developer-portfolio/browser"
   command = "yarn build:netlify"
 
 [build.environment]
