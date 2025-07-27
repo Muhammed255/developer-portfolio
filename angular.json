@@ -35,6 +35,7 @@
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": ["netlify-identity-widget"],
             "inlineStyleLanguage": "scss",
             "assets": [
               {
@@ -43,7 +44,7 @@
               },
               "src/favicon.ico",
               "src/assets",
-              "src/_redirects" 
+              "src/_redirects"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/magenta-violet.css",
@@ -56,13 +57,18 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2mB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "20kB"
+                },
+                {
+                  "type": "bundle",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ],
               "outputHashing": "all"

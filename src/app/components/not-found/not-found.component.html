@@ -1,0 +1,130 @@
+<div
+  class="not-found-container"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxFill
+>
+  <mat-card class="error-card" fxFlex="none">
+    <mat-card-content>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
+        <!-- Error Icon and Number -->
+        <div
+          class="error-header"
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          fxLayoutGap="16px"
+        >
+          <mat-icon class="error-icon">error_outline</mat-icon>
+          <h1 class="error-number">404</h1>
+        </div>
+
+        <!-- Error Message -->
+        <div
+          class="error-content"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+          fxLayoutGap="16px"
+        >
+          <h2 class="error-title">Page Not Found</h2>
+          <p class="error-description">
+            Oops! The page you're looking for doesn't exist. It might have been
+            moved, deleted, or you entered the wrong URL.
+          </p>
+        </div>
+
+        <!-- Illustration -->
+        <div
+          class="illustration"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+        >
+          <svg width="200" height="150" viewBox="0 0 200 150" class="error-svg">
+            <!-- Background -->
+            <rect width="200" height="150" fill="#f5f5f5" rx="8" />
+
+            <!-- Mountains -->
+            <polygon points="0,120 40,80 80,120" fill="#e0e0e0" />
+            <polygon points="60,120 100,70 140,120" fill="#d0d0d0" />
+            <polygon points="120,120 160,85 200,120" fill="#e0e0e0" />
+
+            <!-- Sun -->
+            <circle cx="160" cy="30" r="15" fill="#ffeb3b" />
+
+            <!-- Cloud -->
+            <ellipse cx="50" cy="40" rx="15" ry="8" fill="white" />
+            <ellipse cx="60" cy="40" rx="20" ry="10" fill="white" />
+            <ellipse cx="70" cy="40" rx="15" ry="8" fill="white" />
+
+            <!-- Broken Road -->
+            <rect x="80" y="120" width="40" height="8" fill="#666" />
+            <rect x="85" y="128" width="30" height="4" fill="#999" />
+
+            <!-- Crack in road -->
+            <path
+              d="M 100 120 L 105 135 L 95 140"
+              stroke="#333"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+
+        <!-- Action Buttons -->
+        <div
+          class="action-buttons"
+          fxLayout="row"
+          fxLayout.xs="column"
+          fxLayoutAlign="center center"
+          fxLayoutGap="16px"
+        >
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="goHome()"
+            class="action-button"
+          >
+            <mat-icon>home</mat-icon>
+            Go Home
+          </button>
+
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="goBack()"
+            class="action-button"
+          >
+            <mat-icon>arrow_back</mat-icon>
+            Go Back
+          </button>
+
+          <button mat-stroked-button (click)="refresh()" class="action-button">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+
+        <!-- Help Section -->
+        <div
+          class="help-section"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+          fxLayoutGap="8px"
+        >
+          <p class="help-text">Still having trouble?</p>
+          <button mat-button color="primary" (click)="contactSupport()">
+            <mat-icon>support_agent</mat-icon>
+            Contact Support
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Background Animation -->
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+</div>
