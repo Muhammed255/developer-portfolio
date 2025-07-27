@@ -1,91 +1,129 @@
-<div class="contact-container">
-  <div class="contact-header">
+<div class="contact-container" fxLayout="column" fxLayoutGap="24px">
+  <!-- Contact Header -->
+  <div class="contact-header" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
     <h2>Get In Touch</h2>
     <p>Let's discuss your next project or just say hello!</p>
   </div>
 
-  <div class="contact-content">
-    <div class="contact-info">
+  <!-- Contact Content -->
+  <div class="contact-content" 
+       fxLayout="column" 
+       fxLayout.gt-md="row" 
+       fxLayoutGap="32px" 
+       fxLayoutAlign="start stretch">
+    
+    <!-- Contact Info Sidebar -->
+    <div class="contact-info" 
+         fxFlex="35" 
+         fxFlex.lt-lg="100"
+         fxLayout="column" 
+         fxLayoutGap="24px">
+      
+      <!-- Contact Information Card -->
       <mat-card class="info-card">
         <mat-card-header>
           <mat-card-title>Contact Information</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="contact-item">
-            <mat-icon>email</mat-icon>
-            <div>
-              <h4>Email</h4>
-              <p>contact&#64;example.com</p>
+          <div fxLayout="column" fxLayoutGap="0px">
+            
+            <div class="contact-item" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16px">
+              <mat-icon fxFlex="none">email</mat-icon>
+              <div fxFlex="1" fxLayout="column" fxLayoutGap="4px">
+                <h4>Email</h4>
+                <p>contact&#64;example.com</p>
+              </div>
             </div>
-          </div>
 
-          <div class="contact-item">
-            <mat-icon>phone</mat-icon>
-            <div>
-              <h4>Phone</h4>
-              <p>+1 (555) 123-4567</p>
+            <div class="contact-item" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16px">
+              <mat-icon fxFlex="none">phone</mat-icon>
+              <div fxFlex="1" fxLayout="column" fxLayoutGap="4px">
+                <h4>Phone</h4>
+                <p>+1 (555) 123-4567</p>
+              </div>
             </div>
-          </div>
 
-          <div class="contact-item">
-            <mat-icon>location_on</mat-icon>
-            <div>
-              <h4>Location</h4>
-              <p>Your City, Country</p>
+            <div class="contact-item" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16px">
+              <mat-icon fxFlex="none">location_on</mat-icon>
+              <div fxFlex="1" fxLayout="column" fxLayoutGap="4px">
+                <h4>Location</h4>
+                <p>Your City, Country</p>
+              </div>
             </div>
-          </div>
 
-          <div class="contact-item">
-            <mat-icon>schedule</mat-icon>
-            <div>
-              <h4>Response Time</h4>
-              <p>Usually within 24 hours</p>
+            <div class="contact-item" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16px">
+              <mat-icon fxFlex="none">schedule</mat-icon>
+              <div fxFlex="1" fxLayout="column" fxLayoutGap="4px">
+                <h4>Response Time</h4>
+                <p>Usually within 24 hours</p>
+              </div>
             </div>
+            
           </div>
         </mat-card-content>
       </mat-card>
 
+      <!-- Social Media Card -->
       <mat-card class="social-card">
         <mat-card-header>
           <mat-card-title>Connect With Me</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="social-links">
-            <a
-              mat-raised-button
-              href="https://linkedin.com"
-              target="_blank"
-              class="social-button linkedin"
-            >
+          <div class="social-links" 
+               fxLayout="column" 
+               fxLayout.gt-xs="row" 
+               fxLayout.gt-md="column"
+               fxLayoutGap="16px">
+            
+            <a mat-raised-button
+               href="https://linkedin.com"
+               target="_blank"
+               class="social-button linkedin"
+               fxFlex.gt-xs="1"
+               fxFlex.gt-md="none"
+               fxLayout="row" 
+               fxLayoutAlign="center center" 
+               fxLayoutAlign.gt-md="start center"
+               fxLayoutGap="8px">
               <mat-icon>work</mat-icon>
-              LinkedIn
+              <span>LinkedIn</span>
             </a>
 
-            <a
-              mat-raised-button
-              href="https://github.com"
-              target="_blank"
-              class="social-button github"
-            >
+            <a mat-raised-button
+               href="https://github.com"
+               target="_blank"
+               class="social-button github"
+               fxFlex.gt-xs="1"
+               fxFlex.gt-md="none"
+               fxLayout="row" 
+               fxLayoutAlign="center center" 
+               fxLayoutAlign.gt-md="start center"
+               fxLayoutGap="8px">
               <mat-icon>code</mat-icon>
-              GitHub
+              <span>GitHub</span>
             </a>
 
-            <a
-              mat-raised-button
-              href="https://twitter.com"
-              target="_blank"
-              class="social-button twitter"
-            >
+            <a mat-raised-button
+               href="https://twitter.com"
+               target="_blank"
+               class="social-button twitter"
+               fxFlex.gt-xs="1"
+               fxFlex.gt-md="none"
+               fxLayout="row" 
+               fxLayoutAlign="center center" 
+               fxLayoutAlign.gt-md="start center"
+               fxLayoutGap="8px">
               <mat-icon>share</mat-icon>
-              Twitter
+              <span>Twitter</span>
             </a>
+            
           </div>
         </mat-card-content>
       </mat-card>
     </div>
 
-    <div class="contact-form-section">
+    <!-- Contact Form Section -->
+    <div class="contact-form-section" fxFlex="65" fxFlex.lt-lg="100">
       <mat-card class="form-card">
         <mat-card-header>
           <mat-card-title>Send Me a Message</mat-card-title>
@@ -93,92 +131,160 @@
         </mat-card-header>
 
         <mat-card-content>
-          <form
-            [formGroup]="contactForm"
-            (ngSubmit)="onSubmit()"
-            class="contact-form"
-          >
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="half-width">
+          <!-- Form Status Messages -->
+          @if(submitStatus() === 'success') {
+          <div class="form-status success" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+            <mat-icon>check_circle</mat-icon>
+            <span>Message sent successfully! I'll get back to you soon.</span>
+          </div>
+          }
+
+          @if(submitStatus() === 'error') {
+          <div class="form-status error" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+            <mat-icon>error</mat-icon>
+            <span>Sorry, there was an error sending your message. Please try again.</span>
+          </div>
+          }
+
+          <!-- Contact Form -->
+          <form [formGroup]="contactForm"
+                (ngSubmit)="onSubmit()"
+                class="contact-form"
+                fxLayout="column"
+                fxLayoutGap="24px">
+            
+            <!-- Name Fields Row -->
+            <div class="form-row" 
+                 fxLayout="column" 
+                 fxLayout.gt-xs="row" 
+                 fxLayoutGap="16px">
+              
+              <mat-form-field appearance="outline" 
+                              class="half-width" 
+                              fxFlex="1">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstName" required />
-                @if(contactForm.get('firstName')?.hasError('required')) {
-                <mat-error> First name is required </mat-error>
+                @if(contactForm.get('firstName')?.hasError('required') && contactForm.get('firstName')?.touched) {
+                <mat-error>First name is required</mat-error>
                 }
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="half-width">
+              <mat-form-field appearance="outline" 
+                              class="half-width" 
+                              fxFlex="1">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastName" required />
-                @if(contactForm.get('lastName')?.hasError('required')) {
-                <mat-error> Last name is required </mat-error>
+                @if(contactForm.get('lastName')?.hasError('required') && contactForm.get('lastName')?.touched) {
+                <mat-error>Last name is required</mat-error>
                 }
               </mat-form-field>
+              
             </div>
 
+            <!-- Email Field -->
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email" required />
-              @if(contactForm.get('email')?.hasError('required')) {
-              <mat-error> Email is required </mat-error>
-              } @if(contactForm.get('email')?.hasError('email')) {
-              <mat-error> Please enter a valid email </mat-error>
+              <mat-icon matSuffix>email</mat-icon>
+              @if(contactForm.get('email')?.hasError('required') && contactForm.get('email')?.touched) {
+              <mat-error>Email is required</mat-error>
+              } 
+              @if(contactForm.get('email')?.hasError('email') && contactForm.get('email')?.touched) {
+              <mat-error>Please enter a valid email address</mat-error>
               }
             </mat-form-field>
 
+            <!-- Subject Field -->
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Subject</mat-label>
               <mat-select formControlName="subject" required>
-                <mat-option value="general">General Inquiry</mat-option>
-                <mat-option value="project">Project Discussion</mat-option>
-                <mat-option value="collaboration">Collaboration</mat-option>
-                <mat-option value="job">Job Opportunity</mat-option>
-                <mat-option value="other">Other</mat-option>
+                <mat-option value="general">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                    <mat-icon>help_outline</mat-icon>
+                    <span>General Inquiry</span>
+                  </div>
+                </mat-option>
+                <mat-option value="project">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                    <mat-icon>work_outline</mat-icon>
+                    <span>Project Discussion</span>
+                  </div>
+                </mat-option>
+                <mat-option value="collaboration">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                    <mat-icon>handshake</mat-icon>
+                    <span>Collaboration</span>
+                  </div>
+                </mat-option>
+                <mat-option value="job">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                    <mat-icon>business_center</mat-icon>
+                    <span>Job Opportunity</span>
+                  </div>
+                </mat-option>
+                <mat-option value="other">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                    <mat-icon>more_horiz</mat-icon>
+                    <span>Other</span>
+                  </div>
+                </mat-option>
               </mat-select>
-              @if(contactForm.get('subject')?.hasError('required')) {
-              <mat-error> Please select a subject </mat-error>
+              <mat-icon matSuffix>arrow_drop_down</mat-icon>
+              @if(contactForm.get('subject')?.hasError('required') && contactForm.get('subject')?.touched) {
+              <mat-error>Please select a subject</mat-error>
               }
             </mat-form-field>
 
+            <!-- Message Field -->
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Message</mat-label>
-              <textarea
-                matInput
-                formControlName="message"
-                rows="6"
-                required
-                placeholder="Tell me about your project or inquiry..."
-              ></textarea>
-              @if(contactForm.get('message')?.hasError('required')) {
-              <mat-error> Message is required </mat-error>
-              } @if(contactForm.get('message')?.hasError('minlength')) {
-              <mat-error>
-                Message must be at least 10 characters long
-              </mat-error>
+              <textarea matInput
+                        formControlName="message"
+                        rows="6"
+                        required
+                        placeholder="Tell me about your project or inquiry..."
+                        maxlength="1000"></textarea>
+              <mat-hint align="end">{{contactForm.get('message')?.value?.length || 0}}/1000</mat-hint>
+              @if(contactForm.get('message')?.hasError('required') && contactForm.get('message')?.touched) {
+              <mat-error>Message is required</mat-error>
+              } 
+              @if(contactForm.get('message')?.hasError('minlength') && contactForm.get('message')?.touched) {
+              <mat-error>Message must be at least 10 characters long</mat-error>
               }
             </mat-form-field>
 
-            <div class="form-actions">
-              <button
-                mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="contactForm.invalid || isSubmitting()"
-                class="submit-button"
-              >
-                @if(!isSubmitting()){<mat-icon>send</mat-icon>}
-                @if(isSubmitting()){<mat-icon class="spinning">refresh</mat-icon>}
-                {{ isSubmitting() ? "Sending..." : "Send Message" }}
+            <!-- Form Actions -->
+            <div class="form-actions" 
+                 fxLayout="column" 
+                 fxLayout.gt-xs="row" 
+                 fxLayoutAlign="space-between center"
+                 fxLayoutGap="16px">
+              
+              <button mat-raised-button
+                      color="primary"
+                      type="submit"
+                      [disabled]="contactForm.invalid || isSubmitting()"
+                      class="submit-button"
+                      fxLayout="row" 
+                      fxLayoutAlign="center center" 
+                      fxLayoutGap="8px">
+                @if(!isSubmitting()) {
+                  <mat-icon>send</mat-icon>
+                }
+                @if(isSubmitting()) {
+                  <mat-icon class="spinning">refresh</mat-icon>
+                }
+                <span>{{ isSubmitting() ? "Sending..." : "Send Message" }}</span>
               </button>
 
-              <button
-                mat-button
-                type="button"
-                (click)="resetForm()"
-                [disabled]="isSubmitting()"
-              >
-                Reset
+              <button mat-button
+                      type="button"
+                      (click)="resetForm()"
+                      [disabled]="isSubmitting()">
+                <mat-icon>refresh</mat-icon>
+                Reset Form
               </button>
+              
             </div>
           </form>
         </mat-card-content>

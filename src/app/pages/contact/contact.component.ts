@@ -51,6 +51,8 @@ export class ContactComponent {
   
   // Component state using signals
   readonly isSubmitting = signal(false);
+
+  submitStatus = signal<'idle' | 'success' | 'error'>('idle');
   
   // Form setup
   readonly contactForm: FormGroup<ContactFormControls>;
@@ -103,6 +105,8 @@ export class ContactComponent {
       return; // Prevent double submission
     }
 
+    this.submitStatus.set('idle');
+
     this.isSubmitting.set(true);
     const formData = this.getFormData();
 
@@ -112,9 +116,21 @@ export class ContactComponent {
         finalize(() => this.isSubmitting.set(false))
       )
       .subscribe({
-        next: (response) => this.handleSuccess(response),
-        error: (error) => this.handleError(error)
+        next: (response) => {
+          this.submitStatus.set('success');
+          return this.handleSuccess(response)
+        },
+        error: (error) => {
+          this.submitStatus.set('error');
+          setTimeout(() => {
+            if (this.submitStatus() === 'error') {
+              this.submitStatus.set('idle');
+            }
+          }, 5000);
+          return this.handleError(error)
+        }
       });
+      this.isSubmitting.set(false)
   }
 
   /**
