@@ -1,0 +1,538 @@
+// Import Angular Material theming functions
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define eye-friendly color palettes
+$warm-beige: (
+  50: #fdfcfb,
+  100: #faf8f5,
+  200: #f5f1ea,
+  300: #f0e9df,
+  400: #ebe1d4,
+  500: #e6d9c9,
+  600: #d4c4a8,
+  700: #c2af87,
+  800: #b09a66,
+  900: #9e8545,
+  A100: #fdfcfb,
+  A200: #f5f1ea,
+  A400: #ebe1d4,
+  A700: #c2af87,
+  contrast: (
+    50: #2d3748,
+    100: #2d3748,
+    200: #2d3748,
+    300: #2d3748,
+    400: #2d3748,
+    500: #2d3748,
+    600: #2d3748,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #2d3748,
+    A200: #2d3748,
+    A400: #2d3748,
+    A700: #ffffff,
+  )
+);
+
+$soft-blue: (
+  50: #f0f8ff,
+  100: #e1f1fe,
+  200: #c3e3fd,
+  300: #a4d5fc,
+  400: #86c7fb,
+  500: #68b9fa,
+  600: #5aa6e0,
+  700: #4c93c6,
+  800: #3e80ac,
+  900: #306d92,
+  A100: #f0f8ff,
+  A200: #c3e3fd,
+  A400: #86c7fb,
+  A700: #4c93c6,
+  contrast: (
+    50: #2d3748,
+    100: #2d3748,
+    200: #2d3748,
+    300: #2d3748,
+    400: #2d3748,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #2d3748,
+    A200: #2d3748,
+    A400: #2d3748,
+    A700: #ffffff,
+  )
+);
+
+$warm-accent: (
+  50: #fff8f0,
+  100: #ffeedd,
+  200: #ffddb8,
+  300: #ffcc93,
+  400: #ffbb6e,
+  500: #ffaa49,
+  600: #e6993f,
+  700: #cc8835,
+  800: #b3772b,
+  900: #996621,
+  A100: #fff8f0,
+  A200: #ffddb8,
+  A400: #ffbb6e,
+  A700: #cc8835,
+  contrast: (
+    50: #2d3748,
+    100: #2d3748,
+    200: #2d3748,
+    300: #2d3748,
+    400: #2d3748,
+    500: #2d3748,
+    600: #2d3748,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #2d3748,
+    A200: #2d3748,
+    A400: #2d3748,
+    A700: #ffffff,
+  )
+);
+
+// Dark theme colors
+$dark-surface: (
+  50: #4a5568,
+  100: #3d4a5c,
+  200: #2d3748,
+  300: #2a3441,
+  400: #26303a,
+  500: #1f2937,
+  600: #1a202c,
+  700: #161b22,
+  800: #121419,
+  900: #0d1117,
+  A100: #4a5568,
+  A200: #2d3748,
+  A400: #1f2937,
+  A700: #161b22,
+  contrast: (
+    50: #2d3748,
+    100: #f7fafc,
+    200: #f7fafc,
+    300: #f7fafc,
+    400: #f7fafc,
+    500: #f7fafc,
+    600: #f7fafc,
+    700: #f7fafc,
+    800: #f7fafc,
+    900: #f7fafc,
+    A100: #2d3748,
+    A200: #f7fafc,
+    A400: #f7fafc,
+    A700: #f7fafc,
+  )
+);
+
+$soft-blue-dark: (
+  50: #e3f2fd,
+  100: #bbdefb,
+  200: #90caf9,
+  300: #64b5f6,
+  400: #42a5f5,
+  500: #2196f3,
+  600: #6bb6ff,
+  700: #5ba0f2,
+  800: #4a90e2,
+  900: #3a7bd5,
+  A100: #e3f2fd,
+  A200: #90caf9,
+  A400: #42a5f5,
+  A700: #5ba0f2,
+  contrast: (
+    50: #2d3748,
+    100: #2d3748,
+    200: #2d3748,
+    300: #2d3748,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #2d3748,
+    A200: #2d3748,
+    A400: #ffffff,
+    A700: #ffffff,
+  )
+);
+
+$warm-accent-dark: (
+  50: #fff3e0,
+  100: #ffe0b2,
+  200: #ffcc80,
+  300: #ffb74d,
+  400: #ffa726,
+  500: #ff9800,
+  600: #ffb74d,
+  700: #ffa726,
+  800: #ff9800,
+  900: #f57c00,
+  A100: #fff3e0,
+  A200: #ffcc80,
+  A400: #ffa726,
+  A700: #ffa726,
+  contrast: (
+    50: #2d3748,
+    100: #2d3748,
+    200: #2d3748,
+    300: #2d3748,
+    400: #2d3748,
+    500: #2d3748,
+    600: #2d3748,
+    700: #2d3748,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #2d3748,
+    A200: #2d3748,
+    A400: #2d3748,
+    A700: #2d3748,
+  )
+);
+
+// Create light theme
+$light-theme: mat.m2-define-light-theme((
+  color: (
+    primary: mat.m2-define-palette($warm-beige, 200, 50, 400),
+    accent: mat.m2-define-palette($soft-blue, 400, 200, 600),
+    warn: mat.m2-define-palette($warm-accent, 400, 200, 600),
+  ),
+  typography: mat.m2-define-typography-config(
+    $font-family: '"Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", Arial, sans-serif',
+    $headline-1: mat.m2-define-typography-level(2rem, 2.4rem, 300, $letter-spacing: -0.02em),
+    $headline-2: mat.m2-define-typography-level(1.75rem, 2.1rem, 400, $letter-spacing: -0.01em),
+    $headline-3: mat.m2-define-typography-level(1.5rem, 1.8rem, 400),
+    $headline-4: mat.m2-define-typography-level(1.25rem, 1.5rem, 500),
+    $headline-5: mat.m2-define-typography-level(1.125rem, 1.35rem, 500),
+    $headline-6: mat.m2-define-typography-level(1rem, 1.2rem, 600),
+    $body-1: mat.m2-define-typography-level(1rem, 1.6rem, 400),
+    $body-2: mat.m2-define-typography-level(0.875rem, 1.4rem, 400),
+    $button: mat.m2-define-typography-level(0.875rem, 1rem, 500, $letter-spacing: 0.02em),
+  ),
+  density: 0,
+));
+
+// Create dark theme
+$dark-theme: mat.m2-define-dark-theme((
+  color: (
+    primary: mat.m2-define-palette($dark-surface, 600, 400, 800),
+    accent: mat.m2-define-palette($soft-blue-dark, 400, 200, 600),
+    warn: mat.m2-define-palette($warm-accent-dark, 400, 300, 600),
+  ),
+  typography: mat.m2-define-typography-config(
+    $font-family: '"Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", Arial, sans-serif',
+    $headline-1: mat.m2-define-typography-level(2rem, 2.4rem, 300, $letter-spacing: -0.02em),
+    $headline-2: mat.m2-define-typography-level(1.75rem, 2.1rem, 400, $letter-spacing: -0.01em),
+    $headline-3: mat.m2-define-typography-level(1.5rem, 1.8rem, 400),
+    $headline-4: mat.m2-define-typography-level(1.25rem, 1.5rem, 500),
+    $headline-5: mat.m2-define-typography-level(1.125rem, 1.35rem, 500),
+    $headline-6: mat.m2-define-typography-level(1rem, 1.2rem, 600),
+    $body-1: mat.m2-define-typography-level(1rem, 1.6rem, 400),
+    $body-2: mat.m2-define-typography-level(0.875rem, 1.4rem, 400),
+    $button: mat.m2-define-typography-level(0.875rem, 1rem, 500, $letter-spacing: 0.02em),
+  ),
+  density: 0,
+));
+
+// Apply the light theme by default
+@include mat.all-component-themes($light-theme);
+
+// Eye-friendly custom CSS variables for light theme
+:root {
+  // Surface colors - warm, soft whites
+  --surface-primary: #fdfcfb;
+  --surface-secondary: #faf8f5;
+  --surface-elevated: #ffffff;
+  --surface-card: #ffffff;
+  
+  // Text colors - warm grays instead of pure black
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --text-disabled: #a0aec0;
+  
+  // Interactive colors
+  --color-primary: #68b9fa;
+  --color-primary-hover: #5aa6e0;
+  --color-accent: #ffaa49;
+  --color-accent-hover: #e6993f;
+  
+  // Border and shadow
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08);
+  
+  // Status colors (softer versions)
+  --color-success: #48bb78;
+  --color-warning: #ed8936;
+  --color-error: #f56565;
+  --color-info: #4299e1;
+}
+
+// Dark theme overrides
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+  
+  // Custom dark theme variables
+  --surface-primary: #1a202c;
+  --surface-secondary: #2d3748;
+  --surface-elevated: #3d4a5c;
+  --surface-card: #2d3748;
+  
+  // Text colors - soft whites, avoiding pure white
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a0aec0;
+  --text-disabled: #718096;
+  
+  // Interactive colors
+  --color-primary: #6bb6ff;
+  --color-primary-hover: #5ba0f2;
+  --color-accent: #ffb74d;
+  --color-accent-hover: #ffa726;
+  
+  // Border and shadow
+  --border-color: #4a5568;
+  --border-light: #3d4a5c;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  
+  // Status colors (adjusted for dark theme)
+  --color-success: #68d391;
+  --color-warning: #f6ad55;
+  --color-error: #fc8181;
+  --color-info: #63b3ed;
+}
+
+// Enhanced Material component customizations
+.app-container {
+  background-color: var(--surface-primary);
+  color: var(--text-primary);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+// Toolbar customizations
+.mat-toolbar {
+  background: rgba(253, 252, 251, 0.85) !important;
+  color: var(--text-primary) !important;
+  backdrop-filter: blur(12px) saturate(180%);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  
+  .dark-theme & {
+    background: rgba(45, 55, 72, 0.85) !important;
+    border-bottom-color: var(--border-color);
+  }
+}
+
+// Button customizations
+.mat-button, .mat-raised-button, .mat-stroked-button, .mat-flat-button {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  
+  &:not([disabled]):hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.mat-button {
+  color: var(--text-secondary) !important;
+  
+  &:hover {
+    background-color: var(--surface-elevated) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  &.active {
+    background-color: var(--surface-elevated) !important;
+    color: var(--color-primary) !important;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.mat-fab, .mat-mini-fab {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  box-shadow: var(--shadow-lg) !important;
+  
+  &:hover {
+    background-color: var(--color-primary-hover) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+// Sidenav customizations
+.mat-sidenav {
+  background-color: var(--surface-secondary) !important;
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.mat-sidenav-content {
+  background-color: var(--surface-primary) !important;
+}
+
+.mat-nav-list .mat-list-item {
+  color: var(--text-secondary) !important;
+  border-radius: 8px;
+  margin: 2px 12px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--surface-elevated) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  &.active {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+    
+    .mat-icon {
+      color: white !important;
+    }
+  }
+  
+  .mat-icon {
+    color: inherit !important;
+    margin-right: 12px;
+  }
+}
+
+// Menu customizations
+.mat-menu-panel {
+  background: var(--surface-elevated) !important;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  border-radius: 8px !important;
+  
+  .mat-menu-item {
+    color: var(--text-secondary) !important;
+    
+    &:hover {
+      background-color: var(--surface-primary) !important;
+      color: var(--text-primary) !important;
+    }
+    
+    .mat-icon {
+      color: inherit !important;
+      margin-right: 8px;
+    }
+  }
+}
+
+// Slide toggle customizations
+.mat-slide-toggle {
+  .mat-slide-toggle-thumb {
+    background-color: var(--surface-elevated) !important;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .mat-slide-toggle-bar {
+    background-color: var(--border-color) !important;
+    opacity: 0.6;
+  }
+  
+  &.mat-checked {
+    .mat-slide-toggle-thumb {
+      background-color: var(--color-primary) !important;
+    }
+    
+    .mat-slide-toggle-bar {
+      background-color: var(--color-primary) !important;
+      opacity: 0.3;
+    }
+  }
+}
+
+// Icon button customizations
+.mat-icon-button {
+  color: var(--text-secondary) !important;
+  
+  &:hover {
+    background-color: var(--surface-elevated) !important;
+    color: var(--text-primary) !important;
+  }
+}
+
+// Divider customizations
+.mat-divider {
+  border-top-color: var(--border-color) !important;
+}
+
+// Focus indicators
+.mat-button:focus-visible,
+.mat-icon-button:focus-visible,
+.mat-fab:focus-visible,
+.mat-mini-fab:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px;
+}
+
+// Smooth transitions for all Material components
+.mat-button,
+.mat-icon-button,
+.mat-fab,
+.mat-mini-fab,
+.mat-slide-toggle,
+.mat-menu-item,
+.mat-list-item,
+.mat-toolbar,
+.mat-sidenav,
+.mat-sidenav-content {
+  transition: 
+    background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  .mat-button,
+  .mat-icon-button,
+  .mat-fab,
+  .mat-mini-fab,
+  .mat-slide-toggle,
+  .mat-menu-item,
+  .mat-list-item,
+  .mat-toolbar,
+  .mat-sidenav,
+  .mat-sidenav-content {
+    transition: none !important;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #666666;
+    --text-secondary: #000000;
+  }
+  
+  .dark-theme {
+    --border-color: #999999;
+    --text-secondary: #ffffff;
+  }
+}

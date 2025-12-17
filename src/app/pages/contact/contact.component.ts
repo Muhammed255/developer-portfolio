@@ -49,6 +49,8 @@ export class ContactComponent {
   private readonly contactService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
   
+  mail = 'mhmd.ahmd.0597@gmail.com'
+
   // Component state using signals
   readonly isSubmitting = signal(false);
 
