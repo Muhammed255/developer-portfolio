@@ -2,14 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>DeveloperPortfolio</title>
+  <title>Mohamed Abdelazim | Software Engineer</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mohamed Abdelazim — software engineer. Projects, skills, experience and articles.">
+  <meta name="theme-color" content="#3f51b5">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mohamed Abdelazim">
+  <meta property="og:title" content="Mohamed Abdelazim | Software Engineer">
+  <meta property="og:description" content="Mohamed Abdelazim — software engineer. Projects, skills, experience and articles.">
+  <meta property="og:image" content="/dev-pic.jpg">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preload" href="/fonts/material-icons-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 </head>
-<body class="mat-typography">
+<body>
+  <!-- Apply the saved theme before first paint (hash is allowed in the CSP). -->
+  <script>try{var t=localStorage.getItem('portfolio-theme');if(t==='true'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches))document.body.classList.add('dark-theme')}catch(e){}</script>
   <app-root></app-root>
 </body>
 </html>

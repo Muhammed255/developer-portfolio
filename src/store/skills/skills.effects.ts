@@ -1,27 +1,22 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { PortfolioDataService } from '../../app/services/portfolio-data.service';
 import * as SkillActions from './skills.actions';
 
 @Injectable()
 export class SkillsEffects {
-  private actions$ = inject(Actions);
-  private skillService = inject(PortfolioDataService);
+  private readonly actions$ = inject(Actions);
+  private readonly data = inject(PortfolioDataService);
 
-  loadSkills$ = createEffect(() =>
+  load$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SkillActions.loadSkills),
       switchMap(() =>
-        this.skillService.getSkills().pipe(
+        this.data.getSkills().pipe(
           map((skills) => SkillActions.loadSkillsSuccess({ skills })),
           catchError((error) =>
-            of(
-              SkillActions.loadSkillsFailure({
-                error: error.message || 'Failed to load skills',
-              })
-            )
+            of(SkillActions.loadSkillsFailure({ error: error.message || 'Failed to load skills' }))
           )
         )
       )

@@ -1,41 +1,39 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, TitleStrategy, withInMemoryScrolling } from '@angular/router';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 
 import { routes } from './app.routes';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideStore } from '@ngrx/store';
+import { SeoTitleStrategy } from './seo/seo-title.strategy';
 import { themeReducer } from '../store/theme/theme.reducer';
-import { provideEffects } from '@ngrx/effects';
+import { ThemeEffects } from '../store/theme/theme.effects';
 import { ProjectsEffects } from '../store/project/project.effects';
-import { ExperienceEffects } from '../store/experience/experience.effects';
+import { ExperiencesEffects } from '../store/experience/experience.effects';
 import { SkillsEffects } from '../store/skills/skills.effects';
-import { BlogEffects } from '../store/blog/blog.effects';
 import { projectsReducer } from '../store/project/project.reducer';
 import { experienceReducer } from '../store/experience/experience.reducers';
 import { skillsReducer } from '../store/skills/skills.reducers';
-import { blogReducer } from '../store/blog/blog.reducers';
-import { uiReducer } from '../store/ui/ui.reducers';
-import { provideHttpClient } from '@angular/common/http';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(),
-    provideRouter(routes),
-    provideAnimationsAsync(),
+    provideHttpClient(withFetch()),
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })),
+    { provide: TitleStrategy, useClass: SeoTitleStrategy },
     provideStore({
       theme: themeReducer,
       projects: projectsReducer,
       experience: experienceReducer,
       skills: skillsReducer,
-      blog: blogReducer,
-      ui: uiReducer
     }),
     provideEffects(
+      ThemeEffects,
       ProjectsEffects,
-      ExperienceEffects,
-      SkillsEffects,
-      BlogEffects
+      ExperiencesEffects,
+      SkillsEffects
     ),
+    provideClientHydration(withEventReplay()),
   ],
 };

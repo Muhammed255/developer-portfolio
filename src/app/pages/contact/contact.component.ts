@@ -1,22 +1,15 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AuthService } from '../../services/auth.service';
-import { finalize, map, Subject, takeUntil } from 'rxjs';
-
-interface ContactFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  subject: string;
-  message: string;
-}
+import { ContactError, ContactMessage, ContactService } from '../../services/contact.service';
+import { finalize } from 'rxjs';
+import { profile } from '../../../data/profile.data';
 
 interface ContactFormControls {
   firstName: FormControl<string>;
@@ -24,32 +17,34 @@ interface ContactFormControls {
   email: FormControl<string>;
   subject: FormControl<string>;
   message: FormControl<string>;
+  website: FormControl<string>;
 }
 
 
 @Component({
-  selector: 'app-contact',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss'
+    selector: 'app-contact',
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSelectModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './contact.component.html',
+    styleUrl: './contact.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactComponent {
 
   private readonly fb = inject(FormBuilder);
-  private readonly contactService = inject(AuthService);
+  private readonly contactService = inject(ContactService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly snackBar = inject(MatSnackBar);
   
   // Component state using signals
+  readonly profile = profile;
   readonly isSubmitting = signal(false);
 
   submitStatus = signal<'idle' | 'success' | 'error'>('idle');
@@ -66,16 +61,8 @@ export class ContactComponent {
     { value: 'other', label: 'Other' }
   ] as const;
 
-  // Cleanup subscription
-  private readonly destroy$ = new Subject<void>();
-
   constructor() {
     this.contactForm = this.createForm();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   /**
@@ -87,7 +74,9 @@ export class ContactComponent {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       subject: ['', Validators.required],
-      message: ['', [Validators.required, Validators.minLength(10)]]
+      message: ['', [Validators.required, Validators.minLength(10)]],
+      // Honeypot: hidden from people, bots tend to fill it in.
+      website: ['']
     });
   }
 
@@ -112,13 +101,13 @@ export class ContactComponent {
 
     this.contactService.sendMessage(formData)
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
         finalize(() => this.isSubmitting.set(false))
       )
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.submitStatus.set('success');
-          return this.handleSuccess(response)
+          this.handleSuccess();
         },
         error: (error) => {
           this.submitStatus.set('error');
@@ -127,10 +116,9 @@ export class ContactComponent {
               this.submitStatus.set('idle');
             }
           }, 5000);
-          return this.handleError(error)
+          this.handleError(error);
         }
       });
-      this.isSubmitting.set(false)
   }
 
   /**
@@ -148,14 +136,15 @@ export class ContactComponent {
   /**
    * Gets strongly typed form data
    */
-  private getFormData(): ContactFormData {
+  private getFormData(): ContactMessage {
     const formValue = this.contactForm.getRawValue();
     return {
       firstName: formValue.firstName.trim(),
       lastName: formValue.lastName.trim(),
       email: formValue.email.trim().toLowerCase(),
-      subject: formValue.subject,
-      message: formValue.message.trim()
+      subject: this.subjectOptions.find((o) => o.value === formValue.subject)?.label ?? formValue.subject,
+      message: formValue.message.trim(),
+      website: formValue.website
     };
   }
 
@@ -176,7 +165,7 @@ export class ContactComponent {
   /**
    * Handles successful form submission
    */
-  private handleSuccess(response: any): void {
+  private handleSuccess(): void {
     this.showSuccess('Message sent successfully! We\'ll get back to you soon.');
     this.resetForm();
   }
@@ -184,20 +173,8 @@ export class ContactComponent {
   /**
    * Handles form submission errors
    */
-  private handleError(error: any): void {
-    console.error('Contact form submission error:', error);
-    
-    let errorMessage = 'Failed to send message. Please try again.';
-    
-    if (error.status === 429) {
-      errorMessage = 'Too many requests. Please wait a moment before trying again.';
-    } else if (error.status === 400) {
-      errorMessage = 'Please check your input and try again.';
-    } else if (error.status === 0) {
-      errorMessage = 'Network error. Please check your connection and try again.';
-    }
-    
-    this.showError(errorMessage);
+  private handleError(error: ContactError): void {
+    this.showError(error.message);
   }
 
   /**
@@ -260,6 +237,7 @@ export class ContactComponent {
    */
   private getFieldDisplayName(controlName: keyof ContactFormControls): string {
     const displayNames: Record<keyof ContactFormControls, string> = {
+      website: 'Website',
       firstName: 'First name',
       lastName: 'Last name',
       email: 'Email',
