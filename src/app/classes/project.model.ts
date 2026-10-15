@@ -22,7 +22,4 @@ export interface Project {
   solutions?: string[];
   metrics?: ProjectMetrics;
   tags: string[];
-  likes: number;
-  views: number;
-  liked?: boolean
 }

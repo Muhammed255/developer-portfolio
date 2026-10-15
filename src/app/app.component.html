@@ -1,132 +1,67 @@
-<div class="app-container" [class.dark-theme]="isDarkTheme$ | async">
-      <mat-toolbar color="primary" class="main-toolbar">
-        <button mat-icon-button (click)="drawer.toggle()" class="menu-button">
-          <mat-icon>menu</mat-icon>
-        </button>
-        
-        <span class="logo">{{ portfolioName }}</span>
-        
-        <span class="spacer"></span>
-        
-        <!-- Desktop Navigation -->
-        <div class="desktop-nav" fxHide.lt-md>
-          <button mat-button routerLink="/home" routerLinkActive="active">
-            <mat-icon>home</mat-icon>
-            Home
+<mat-sidenav-container class="shell">
+  <mat-sidenav #drawer mode="over" position="end" class="drawer" [fixedInViewport]="true">
+    <nav aria-label="Mobile">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/" (click)="drawer.close()">Home</a>
+        @for (item of navItems; track item.path) {
+          <a mat-list-item [routerLink]="item.path" (click)="drawer.close()">{{ item.label }}</a>
+        }
+        <a mat-list-item routerLink="/contact" (click)="drawer.close()">Contact</a>
+      </mat-nav-list>
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell-content">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="wordmark" routerLink="/" aria-label="Home">
+          <span class="wordmark-mark" aria-hidden="true">MA</span>
+          <span class="wordmark-name">{{ profile.shortName }}</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main">
+          @for (item of navItems; track item.path) {
+            <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">{{ item.label }}</a>
+          }
+        </nav>
+
+        <div class="header-actions">
+          <button
+            mat-icon-button
+            (click)="onThemeToggle()"
+            [attr.aria-label]="isDarkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+            [matTooltip]="isDarkTheme() ? 'Light theme' : 'Dark theme'">
+            <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
           </button>
-          <button mat-button routerLink="/about" routerLinkActive="active">
-            <mat-icon>person</mat-icon>
-            About
-          </button>
-          <button mat-button routerLink="/projects" routerLinkActive="active">
-            <mat-icon>work</mat-icon>
-            Projects
-          </button>
-          <button mat-button routerLink="/skills" routerLinkActive="active">
-            <mat-icon>code</mat-icon>
-            Skills
-          </button>
-          <button mat-button routerLink="/experiences" routerLinkActive="active">
-            <mat-icon>timeline</mat-icon>
-            Experience
-          </button>
-          <button mat-button routerLink="/blog" routerLinkActive="active">
-            <mat-icon>article</mat-icon>
-            Blog
-          </button>
-          <button mat-button routerLink="/contact" routerLinkActive="active">
-            <mat-icon>contact_mail</mat-icon>
-            Contact
+          <a mat-flat-button class="header-cta" routerLink="/contact">Contact me</a>
+          <button mat-icon-button class="menu-button" (click)="drawer.open()" aria-label="Open menu">
+            <mat-icon>menu</mat-icon>
           </button>
         </div>
-        
-        <!-- Theme Toggle -->
-        <mat-slide-toggle
-          [checked]="isDarkTheme$ | async"
-          (change)="onThemeToggle()"
-          class="theme-toggle">
-          <mat-icon>{{ (isDarkTheme$ | async) ? 'dark_mode' : 'light_mode' }}</mat-icon>
-        </mat-slide-toggle>
-        
-        <!-- Language Selector -->
-        <button mat-icon-button [matMenuTriggerFor]="languageMenu">
-          <mat-icon>language</mat-icon>
-        </button>
-        <mat-menu #languageMenu="matMenu">
-          <button mat-menu-item (click)="changeLanguage('en')">
-            <mat-icon>flag</mat-icon>
-            English
-          </button>
-          <button mat-menu-item (click)="changeLanguage('es')">
-            <mat-icon>flag</mat-icon>
-            Español
-          </button>
-          <button mat-menu-item (click)="changeLanguage('fr')">
-            <mat-icon>flag</mat-icon>
-            Français
-          </button>
-        </mat-menu>
-      </mat-toolbar>
+      </div>
+    </header>
 
-      <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #drawer mode="over" class="sidenav">
-          <mat-nav-list>
-            <a mat-list-item routerLink="/home" (click)="drawer.close()">
-              <mat-icon matListItemIcon>home</mat-icon>
-              <span matListItemTitle>Home</span>
-            </a>
-            <a mat-list-item routerLink="/about" (click)="drawer.close()">
-              <mat-icon matListItemIcon>person</mat-icon>
-              <span matListItemTitle>About</span>
-            </a>
-            <a mat-list-item routerLink="/projects" (click)="drawer.close()">
-              <mat-icon matListItemIcon>work</mat-icon>
-              <span matListItemTitle>Projects</span>
-            </a>
-            <a mat-list-item routerLink="/skills" (click)="drawer.close()">
-              <mat-icon matListItemIcon>code</mat-icon>
-              <span matListItemTitle>Skills</span>
-            </a>
-            <a mat-list-item routerLink="/experiences" (click)="drawer.close()">
-              <mat-icon matListItemIcon>timeline</mat-icon>
-              <span matListItemTitle>Experience</span>
-            </a>
-            <a mat-list-item routerLink="/blog" (click)="drawer.close()">
-              <mat-icon matListItemIcon>article</mat-icon>
-              <span matListItemTitle>Blog</span>
-            </a>
-            <a mat-list-item routerLink="/contact" (click)="drawer.close()">
-              <mat-icon matListItemIcon>contact_mail</mat-icon>
-              <span matListItemTitle>Contact</span>
-            </a>
-            
-            <mat-divider></mat-divider>
-            
-            <!-- Social Links -->
-            <a mat-list-item href="https://github.com/Muhammed255" target="_blank">
-              <mat-icon matListItemIcon>code</mat-icon>
-              <span matListItemTitle>GitHub</span>
-            </a>
-            <a mat-list-item href="https://linkedin.com/in/mhmdahmd97" target="_blank">
-              <mat-icon matListItemIcon>work</mat-icon>
-              <span matListItemTitle>LinkedIn</span>
-            </a>
-            <!-- <a mat-list-item href="https://twitter.com/yourusername" target="_blank">
-              <mat-icon matListItemIcon>alternate_email</mat-icon>
-              <span matListItemTitle>Twitter</span>
-            </a> -->
-          </mat-nav-list>
-        </mat-sidenav>
+    <main id="main">
+      <router-outlet></router-outlet>
+    </main>
 
-        <mat-sidenav-content class="main-content">
-          <router-outlet></router-outlet>
-          
-          <!-- Floating Action Buttons -->
-          <div class="fab-container">
-            <button mat-mini-fab color="accent" class="scroll-to-top" (click)="scrollToTop()">
-              <mat-icon>keyboard_arrow_up</mat-icon>
-            </button>
-          </div>
-        </mat-sidenav-content>
-      </mat-sidenav-container>
-    </div>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <p class="footer-name">{{ profile.shortName }}</p>
+          <p class="muted">{{ profile.role }} · {{ profile.location }}</p>
+        </div>
+        <div class="footer-links">
+          <a mat-icon-button [href]="'mailto:' + profile.email" aria-label="Email">
+            <mat-icon>mail</mat-icon>
+          </a>
+          <a mat-button [href]="profile.links.github" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a mat-button [href]="profile.links.linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+      <div class="container footer-meta muted">© {{ year }} {{ profile.shortName }}</div>
+    </footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,121 +1,164 @@
-.app-container {
-  // height: 100vh;
+:host {
+  display: block;
+}
+
+// The window scrolls (not the sidenav container), so the sticky header,
+// scroll restoration and mobile browser chrome all behave normally.
+.shell {
+  min-height: 100vh;
+  overflow: visible;
+  background: var(--mat-sys-surface);
+}
+
+.shell-content {
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  min-height: 100vh;
+  overflow: visible;
 }
 
-.main-toolbar {
+main {
+  flex: 1;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+
+  &:focus {
+    top: 0.75rem;
+  }
+}
+
+// --- Header ----------------------------------------------------------------
+.site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
+  z-index: 10;
+  height: var(--header-height);
+  background: color-mix(in srgb, var(--mat-sys-surface) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: var(--border);
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: cursive;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-.desktop-nav {
+.header-inner {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 2rem;
+  height: 100%;
 }
 
-.desktop-nav button {
-  margin: 0 4px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-.desktop-nav button.active {
-  background-color: rgba(255, 255, 255, 0.1);
+.wordmark-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
 }
 
-.desktop-nav button:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  transform: translateY(-2px);
-}
+.primary-nav {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
 
-.theme-toggle {
-  margin: 0 16px;
-}
+  a {
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface-variant);
+    text-decoration: none;
+    transition: background 0.15s var(--ease), color 0.15s var(--ease);
 
-.sidenav-container {
-  flex: 1;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
+    &:hover {
+      color: var(--mat-sys-on-surface);
+      background: var(--mat-sys-surface-container-high);
+    }
 
-.sidenav {
-  width: 280px;
-  background: var(--mat-app-background);
-  backdrop-filter: blur(10px);
-}
-
-.main-content {
-  background: transparent;
-  min-height: 100vh;
-}
-
-.fab-container {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-}
-
-.scroll-to-top {
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
+    &.active {
+      color: var(--mat-sys-primary);
+      background: var(--mat-sys-primary-container);
+    }
   }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .menu-button {
-  margin-right: 16px;
+  display: none;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 860px) {
+  .primary-nav,
+  .header-cta,
+  .wordmark-name {
+    display: none;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
   .menu-button {
-    display: none;
+    display: inline-flex;
   }
 }
 
-.dark-theme {
-  .sidenav-container {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  }
+.drawer {
+  width: 260px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .desktop-nav {
-    display: none;
-  }
+// --- Footer ----------------------------------------------------------------
+.site-footer {
+  margin-top: auto;
+  padding-block: 2.5rem 1.5rem;
+  border-top: var(--border);
+  background: var(--mat-sys-surface-container-low);
+}
 
-  .logo {
-    font-size: 1.2rem;
-  }
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.footer-name {
+  font-weight: 700;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.footer-meta {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
 }

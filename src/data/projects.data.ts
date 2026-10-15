@@ -9,7 +9,7 @@ export const projectsData: Project[] = [
     description: 'Full-stack web application developed using the MEAN stack',
     longDescription: 'Led the technical implementation of a comprehensive web application using MongoDB, Express.js, Angular, and Node.js. Architected the database design and built RESTful APIs with complete front-end integration.',
     technologies: ['MongoDB', 'Express.js', 'Angular', 'Node.js'],
-    images: ['GP_Logo.png'],
+    images: ['GP_Logo.webp'],
     githubUrl: 'https://github.com/Muhammed255/graduation-project',
     featured: true,
     category: ProjectCategory.WEB_APP,
@@ -28,9 +28,7 @@ export const projectsData: Project[] = [
       'Built comprehensive RESTful APIs',
       'Created responsive Angular frontend'
     ],
-    tags: ['graduation', 'mean-stack', 'full-stack'],
-    likes: 15,
-    views: 450
+    tags: ['graduation', 'mean-stack', 'full-stack']
   },
   {
     id: '2',
@@ -38,7 +36,7 @@ export const projectsData: Project[] = [
     description: 'Angular-based platform for developers to post and interact with technical articles',
     longDescription: 'A comprehensive platform allowing developers to share articles based on specific categories and topics, with features for reactions, comments, and replies.',
     technologies: ['Angular', 'Angular Material', 'Flex Layout', 'Node.js', 'Express', 'MongoDB'],
-    images: ['dev-articles-logo.jpg'],
+    images: ['dev-articles-logo.webp'],
     githubUrl: 'https://github.com/Muhammed255/developers-articles',
     featured: true,
     demoUrl: 'https://dev-article.netlify.app',
@@ -58,9 +56,7 @@ export const projectsData: Project[] = [
       'Built reaction and comment functionality',
       'Created responsive UI with Angular Material'
     ],
-    tags: ['articles', 'community', 'angular', 'mongodb'],
-    likes: 28,
-    views: 720
+    tags: ['articles', 'community', 'angular', 'mongodb']
   },
   {
     id: '3',
@@ -68,7 +64,7 @@ export const projectsData: Project[] = [
     description: 'Real-time chat application built with Angular and Node.js',
     longDescription: 'A simple yet effective chat application that enables real-time communication between users with a clean, responsive interface.',
     technologies: ['Angular', 'Angular Material', 'Flex Layout', 'Node.js', 'Express', 'MongoDB'],
-    images: ['default-logo.png'],
+    images: ['default-logo.webp'],
     githubUrl: 'https://github.com/Muhammed255/let-us-talk',
     featured: false,
     category: ProjectCategory.WEB_APP,
@@ -87,9 +83,7 @@ export const projectsData: Project[] = [
       'Built user status tracking',
       'Created MongoDB message storage'
     ],
-    tags: ['chat', 'real-time', 'websocket'],
-    likes: 22,
-    views: 580
+    tags: ['chat', 'real-time', 'websocket']
   },
   {
     id: '4',
@@ -116,9 +110,7 @@ export const projectsData: Project[] = [
       'Built comprehensive reaction system',
       'Created group management functionality'
     ],
-    tags: ['social-media', 'groups', 'roles', 'angular'],
-    likes: 35,
-    views: 920
+    tags: ['social-media', 'groups', 'roles', 'angular']
   },
   {
     id: '5',
@@ -126,7 +118,7 @@ export const projectsData: Project[] = [
     description: 'Project management application with task handling and notifications',
     longDescription: 'A comprehensive project management tool for handling projects with tasks, deadline notifications, risky project criteria definition, resource allocation, and budget overview.',
     technologies: ['Angular', 'Angular Material', 'Flex Layout', 'Node.js', 'NestJS', 'TypeORM'],
-    images: ['default-logo.png'],
+    images: ['default-logo.webp'],
     githubUrl: 'https://github.com/Muhammed255/collab-flow',
     featured: true,
     category: ProjectCategory.WEB_APP,
@@ -150,17 +142,15 @@ export const projectsData: Project[] = [
       codeQuality: 'Clean architecture with NestJS',
       testCoverage: '85%'
     },
-    tags: ['project-management', 'nestjs', 'notifications', 'budget'],
-    likes: 42,
-    views: 1180
+    tags: ['project-management', 'nestjs', 'notifications', 'budget']
   },
   {
     id: '6',
     title: 'Developer Portfolio',
-    description: 'Personal portfolio website with integrated blog functionality',
-    longDescription: 'A professional portfolio website showcasing projects and skills, with an integrated blog for sharing helpful content with the developer community.',
+    description: 'Personal portfolio website showcasing projects, skills and experience',
+    longDescription: 'A professional portfolio website showcasing projects, skills and experience, with a contact form backed by a serverless email API.',
     technologies: ['Angular', 'Angular Material', 'Flex Layout', 'Node.js', 'NestJS', 'TypeORM'],
-    images: ['default-logo.png'],
+    images: ['default-logo.webp'],
     demoUrl: 'https://3bdelazim-portfolio.netlify.app',
     githubUrl: 'https://github.com/Muhammed255/developer-portfolio',
     featured: true,
@@ -172,17 +162,15 @@ export const projectsData: Project[] = [
     myRole: 'Full-Stack Developer',
     challenges: [
       'SEO optimization',
-      'Blog content management',
+      'Reliable contact-form email delivery',
       'Responsive design across devices'
     ],
     solutions: [
       'Implemented server-side rendering',
-      'Built comprehensive CMS for blog',
+      'Built a serverless contact-form API with rate limiting',
       'Created fully responsive design'
     ],
-    tags: ['portfolio', 'blog', 'personal', 'seo'],
-    likes: 38,
-    views: 850
+    tags: ['portfolio', 'personal', 'seo']
   },
   {
     id: '7',
@@ -209,8 +197,6 @@ export const projectsData: Project[] = [
       'Built efficient Q&A matching',
       'Created privacy-focused architecture'
     ],
-    tags: ['qna', 'anonymous', 'social', 'privacy'],
-    likes: 19,
-    views: 470
+    tags: ['qna', 'anonymous', 'social', 'privacy']
   }
 ];

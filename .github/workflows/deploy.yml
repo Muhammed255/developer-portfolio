@@ -1,0 +1,66 @@
+name: CI / Deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # GitHub OIDC -> AWS role, no stored keys
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn test --watch=false
+      - run: yarn build
+      - name: Fail if the build points at localhost
+        run: "! grep -rl 'localhost:3000' dist/developer-portfolio/browser"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist/developer-portfolio/browser
+
+  deploy:
+    needs: build
+    # Runs only once the AWS stack exists: set the repository variables
+    # SITE_BUCKET and DISTRIBUTION_ID (stack outputs) to enable it.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.SITE_BUCKET != ''
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'eu-central-1' }}
+      - name: Upload hashed assets (cached for a year)
+        run: >-
+          aws s3 sync site "s3://${{ vars.SITE_BUCKET }}" --delete
+          --exclude "*.html" --exclude "*.png" --exclude "*.jpg" --exclude "*.webp" --exclude "*.svg" --exclude "*.ico"
+          --cache-control "public, max-age=31536000, immutable"
+      - name: Upload images (cached for a week)
+        run: >-
+          aws s3 sync site "s3://${{ vars.SITE_BUCKET }}"
+          --exclude "*" --include "*.png" --include "*.jpg" --include "*.webp" --include "*.svg" --include "*.ico"
+          --cache-control "public, max-age=604800"
+      - name: Upload HTML (always revalidated)
+        run: >-
+          aws s3 sync site "s3://${{ vars.SITE_BUCKET }}"
+          --exclude "*" --include "*.html"
+          --cache-control "no-cache"
+      - name: Invalidate HTML in CloudFront
+        run: >-
+          aws cloudfront create-invalidation --distribution-id "${{ vars.DISTRIBUTION_ID }}"
+          --paths "/*"

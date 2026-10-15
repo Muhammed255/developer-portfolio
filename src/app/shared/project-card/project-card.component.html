@@ -1,0 +1,46 @@
+@let p = project();
+<article class="card card--interactive project-card">
+  <button type="button" class="cover" (click)="details.emit(p)" [attr.aria-label]="'Details: ' + p.title">
+    <img [src]="p.images[0] || 'default-logo.webp'" alt="" loading="lazy" decoding="async" />
+  </button>
+
+  <div class="body">
+    <p class="meta">
+      <span>{{ year(p) }}</span>
+      @if (p.myRole) {
+        <span aria-hidden="true">·</span>
+        <span>{{ p.myRole }}</span>
+      }
+    </p>
+    <h3 class="title">
+      <button type="button" class="title-button" (click)="details.emit(p)">{{ p.title }}</button>
+    </h3>
+    <p class="description">{{ p.description }}</p>
+
+    <ul class="tag-list" aria-label="Technologies">
+      @for (tech of p.technologies.slice(0, maxTags()); track tech) {
+        <li class="tag">{{ tech }}</li>
+      }
+      @if (p.technologies.length > maxTags()) {
+        <li class="tag tag--more">+{{ p.technologies.length - maxTags() }}</li>
+      }
+    </ul>
+  </div>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="details.emit(p)">
+      Case study
+    </button>
+    <span class="spacer"></span>
+    @if (p.githubUrl) {
+      <a mat-icon-button [href]="p.githubUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.title + ' source code on GitHub'">
+        <mat-icon>code</mat-icon>
+      </a>
+    }
+    @if (p.demoUrl) {
+      <a mat-icon-button [href]="p.demoUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="p.title + ' live demo'">
+        <mat-icon>open_in_new</mat-icon>
+      </a>
+    }
+  </div>
+</article>

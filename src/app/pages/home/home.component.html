@@ -1,85 +1,158 @@
-<div class="home-container">
-  <section class="hero-section">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1 class="hero-title">
-          Hi, I'm <span class="highlight">Mohamed Abdelazim</span>
-        </h1>
-        <h2 class="hero-subtitle">Full Stack Developer</h2>
-        <p class="hero-description">
-          A dedicated MEAN Stack Developer with 3+ years of experience building full-stack web applications. 
-          Proficient in MongoDB, Express.js, Angular, Node.js, with expertise in NestJS, PostgreSQL, Docker, and microservices architecture.
-        </p>
+<!-- Hero -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <p class="availability">
+        <span class="dot" aria-hidden="true"></span>
+        {{ profile.availability }}
+      </p>
+      <h1>
+        <span class="hello">Hi, I'm {{ profile.shortName }}.</span>
+        <span class="headline">{{ profile.headline }}</span>
+      </h1>
+      <p class="lead">{{ profile.summary }}</p>
 
-        <div class="hero-actions">
-          <button
-            mat-raised-button
-            color="primary"
-            class="cta-button"
-            (click)="navigateToProjects()"
-          >
-            View My Work
-            <mat-icon>arrow_forward</mat-icon>
-          </button>
-
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="navigateToContact()"
-          >
-            Get In Touch
-            <mat-icon>email</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <div class="hero-image">
-        <div class="image-placeholder">
-          <img src="dev-pic.jpg" class="profile-icon" alt="default-user.png">
-          <!-- <mat-icon class="profile-icon">person</mat-icon> -->
-        </div>
+      <div class="btn-row hero-actions">
+        <a mat-flat-button routerLink="/projects">
+          View my work
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </a>
+        <a mat-stroked-button routerLink="/contact">Get in touch</a>
+        <span class="socials">
+          <a mat-icon-button [href]="profile.links.github" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+            <mat-icon>code</mat-icon>
+          </a>
+          <a mat-icon-button [href]="profile.links.linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+            <mat-icon>work</mat-icon>
+          </a>
+          <a mat-icon-button [href]="'mailto:' + profile.email" aria-label="Email">
+            <mat-icon>mail</mat-icon>
+          </a>
+        </span>
       </div>
     </div>
-  </section>
 
-  <section class="quick-links-section">
+    <div class="hero-photo">
+      <img [ngSrc]="profile.photo" width="640" height="741" priority [alt]="profile.shortName" />
+      <p class="photo-caption">
+        <mat-icon aria-hidden="true">location_on</mat-icon>
+        {{ profile.location }}
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <dl class="facts">
+      @for (fact of facts(); track fact.label) {
+        <div class="fact">
+          <dt>{{ fact.label }}</dt>
+          <dd>{{ fact.value }}</dd>
+        </div>
+      }
+    </dl>
+  </div>
+</section>
+
+<!-- What I do -->
+<section class="section section--alt" aria-labelledby="focus-title">
+  <div class="container">
     <div class="section-header">
-      <h3>Explore My Work</h3>
-      <p>Discover what I do and how I can help you</p>
+      <div>
+        <span class="eyebrow">What I do</span>
+        <h2 id="focus-title" class="section-title">End-to-end web development</h2>
+      </div>
     </div>
-
-    <div class="quick-links-grid">
-      <mat-card class="quick-link-card" (click)="navigateToProjects()">
-        <mat-card-content>
-          <mat-icon class="card-icon">work</mat-icon>
-          <h4>Projects</h4>
-          <p>Explore my latest projects and case studies</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="quick-link-card" (click)="navigateToSkills()">
-        <mat-card-content>
-          <mat-icon class="card-icon">code</mat-icon>
-          <h4>Skills</h4>
-          <p>Technologies and tools I work with</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="quick-link-card" (click)="navigateToExperience()">
-        <mat-card-content>
-          <mat-icon class="card-icon">business_center</mat-icon>
-          <h4>Experience</h4>
-          <p>My professional journey and achievements</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="quick-link-card" (click)="navigateToBlog()">
-        <mat-card-content>
-          <mat-icon class="card-icon">article</mat-icon>
-          <h4>Blog</h4>
-          <p>Thoughts, tutorials, and insights</p>
-        </mat-card-content>
-      </mat-card>
+    <div class="focus-grid">
+      @for (area of profile.focusAreas; track area.title) {
+        <article class="card focus-card">
+          <span class="focus-icon"><mat-icon aria-hidden="true">{{ area.icon }}</mat-icon></span>
+          <h3>{{ area.title }}</h3>
+          <p class="muted">{{ area.text }}</p>
+        </article>
+      }
     </div>
-  </section>
-</div>
+  </div>
+</section>
+
+<!-- Selected work -->
+<section class="section" aria-labelledby="work-title">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Selected work</span>
+        <h2 id="work-title" class="section-title">Featured projects</h2>
+      </div>
+      <a class="link-arrow" routerLink="/projects">All projects <mat-icon>arrow_forward</mat-icon></a>
+    </div>
+    <div class="grid">
+      @for (project of featuredProjects(); track project.id) {
+        <app-project-card [project]="project" [maxTags]="4" (details)="openProject($event)" />
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section class="section section--alt" aria-labelledby="exp-title">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Experience</span>
+        <h2 id="exp-title" class="section-title">Where I've worked</h2>
+      </div>
+      <a class="link-arrow" routerLink="/experiences">Full experience <mat-icon>arrow_forward</mat-icon></a>
+    </div>
+    <ol class="exp-list">
+      @for (exp of experiences(); track exp.id) {
+        <li class="card exp-item">
+          <div>
+            <h3>{{ exp.position }}</h3>
+            <p class="muted">{{ exp.company }} · {{ exp.location }}</p>
+          </div>
+          <p class="exp-dates">{{ formatRange(exp.startDate, exp.endDate) }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- Stack -->
+<section class="section" aria-labelledby="stack-title">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Toolbox</span>
+        <h2 id="stack-title" class="section-title">Technologies I use</h2>
+      </div>
+      <a class="link-arrow" routerLink="/skills">All skills <mat-icon>arrow_forward</mat-icon></a>
+    </div>
+    <div class="stack">
+      @for (group of skillGroups(); track group.category) {
+        <div class="stack-row">
+          <h3>{{ group.label }}</h3>
+          <ul class="tag-list">
+            @for (skill of group.skills; track skill.id) {
+              <li class="tag">{{ skill.name }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Call to action -->
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta">
+      <div>
+        <h2>Have a project in mind?</h2>
+        <p>I'm {{ profile.availability.toLowerCase() }}. Tell me what you're building and I'll get back to you.</p>
+      </div>
+      <a mat-flat-button class="cta-button" routerLink="/contact">
+        Start a conversation
+        <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+      </a>
+    </div>
+  </div>
+</section>

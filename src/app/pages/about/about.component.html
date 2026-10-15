@@ -1,197 +1,78 @@
-<div fxLayout="column" fxLayoutGap="24px" class="about-container">
-      <!-- Hero Section -->
-      <mat-card class="hero-card" appearance="outlined">
-        <mat-card-content>
-          <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxLayoutGap="32px">
-            <div class="profile-image">
-              <mat-icon class="profile-icon">person</mat-icon>
-            </div>
-            <div fxFlex fxLayout="column" fxLayoutGap="16px">
-              <div>
-                <h1 class="name">{{ personalInfo().name }}</h1>
-                <h2 class="title">{{ personalInfo().title }}</h2>
-                <p class="summary">{{ personalInfo().summary }}</p>
-              </div>
-              <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="16px">
-                <mat-chip-set>
-                  <mat-chip>
-                    <mat-icon matChipAvatar>email</mat-icon>
-                    {{ personalInfo().email }}
-                  </mat-chip>
-                  <mat-chip>
-                    <mat-icon matChipAvatar>phone</mat-icon>
-                    {{ personalInfo().phone }}
-                  </mat-chip>
-                </mat-chip-set>
-                <div fxLayout="row" fxLayoutGap="8px">
-                  <button mat-icon-button color="primary" [attr.aria-label]="'LinkedIn Profile'">
-                    <mat-icon>link</mat-icon>
-                  </button>
-                  <button mat-icon-button color="primary" [attr.aria-label]="'GitHub Profile'">
-                    <mat-icon>code</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Main Content Tabs -->
-      <mat-card appearance="outlined">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-          
-          <!-- Experience Tab -->
-          <mat-tab label="Experience">
-            <div class="tab-content" fxLayout="column" fxLayoutGap="24px">
-              @for (exp of experiences(); track exp.company) {
-                <mat-card class="experience-card" appearance="outlined">
-                  <mat-card-header>
-                    <mat-card-title>{{ exp.title }}</mat-card-title>
-                    <mat-card-subtitle>
-                      <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                        <span class="company">{{ exp.company }}</span>
-                        <span class="location">{{ exp.location }}</span>
-                        <span class="duration">{{ exp.duration }}</span>
-                      </div>
-                    </mat-card-subtitle>
-                  </mat-card-header>
-                  <mat-card-content>
-                    <mat-list>
-                      @for (responsibility of exp.responsibilities; track responsibility) {
-                        <mat-list-item>
-                          <mat-icon matListItemIcon>arrow_right</mat-icon>
-                          <div matListItemTitle>{{ responsibility }}</div>
-                        </mat-list-item>
-                      }
-                    </mat-list>
-                  </mat-card-content>
-                </mat-card>
-              }
-            </div>
-          </mat-tab>
-
-          <!-- Skills Tab -->
-          <mat-tab label="Skills">
-            <div class="tab-content" fxLayout="column" fxLayoutGap="24px">
-              @for (category of skillCategories(); track category.name) {
-                <mat-card class="skills-card" appearance="outlined">
-                  <mat-card-header>
-                    <mat-card-title>{{ category.name }}</mat-card-title>
-                  </mat-card-header>
-                  <mat-card-content>
-                    <div fxLayout="column" fxLayoutGap="16px">
-                      @for (skill of category.skills; track skill.name) {
-                        <div class="skill-item">
-                          <div fxLayout="row" fxLayoutAlign="space-between center" class="skill-header">
-                            <span class="skill-name">{{ skill.name }}</span>
-                            <span class="skill-percentage">{{ skill.level }}%</span>
-                          </div>
-                          <mat-progress-bar
-                            mode="determinate"
-                            [value]="skill.level"
-                            class="skill-progress">
-                          </mat-progress-bar>
-                        </div>
-                      }
-                    </div>
-                  </mat-card-content>
-                </mat-card>
-              }
-            </div>
-          </mat-tab>
-
-          <!-- Projects Tab -->
-          <mat-tab label="Projects">
-            <div class="tab-content">
-              <div fxLayout="row wrap" fxLayoutGap="24px grid">
-                @for (project of projects(); track project.name) {
-                  <div fxFlex="100" fxFlex.gt-sm="48" fxFlex.gt-lg="31">
-                    <mat-card class="project-card" appearance="outlined">
-                      <mat-card-header>
-                        <mat-card-title>{{ project.name }}</mat-card-title>
-                      </mat-card-header>
-                      <mat-card-content>
-                        <p class="project-description">{{ project.description }}</p>
-                        
-                        <div class="project-section">
-                          <h4>Technologies</h4>
-                          <mat-chip-set>
-                            @for (tech of project.technologies; track tech) {
-                              <mat-chip>{{ tech }}</mat-chip>
-                            }
-                          </mat-chip-set>
-                        </div>
-
-                        <div class="project-section">
-                          <h4>Key Features</h4>
-                          <mat-list dense>
-                            @for (feature of project.features; track feature) {
-                              <mat-list-item>
-                                <mat-icon matListItemIcon>check_circle</mat-icon>
-                                <div matListItemTitle>{{ feature }}</div>
-                              </mat-list-item>
-                            }
-                          </mat-list>
-                        </div>
-                      </mat-card-content>
-                      <mat-card-actions align="end">
-                        <button mat-button color="primary">
-                          <mat-icon>visibility</mat-icon>
-                          View Details
-                        </button>
-                      </mat-card-actions>
-                    </mat-card>
-                  </div>
-                }
-              </div>
-            </div>
-          </mat-tab>
-
-          <!-- Education Tab -->
-          <mat-tab label="Education & Languages">
-            <div class="tab-content" fxLayout="column" fxLayoutGap="24px">
-              <mat-card appearance="outlined">
-                <mat-card-header>
-                  <mat-card-title>Education</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-                    <mat-icon class="education-icon">school</mat-icon>
-                    <div>
-                      <h3>Bachelor's Degree in Computer Science</h3>
-                      <p>Helwan University | 2022</p>
-                    </div>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-
-              <mat-card appearance="outlined">
-                <mat-card-header>
-                  <mat-card-title>Languages</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  <div fxLayout="column" fxLayoutGap="16px">
-                    <div fxLayout="row" fxLayoutAlign="space-between center">
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                        <mat-icon>language</mat-icon>
-                        <span>Arabic</span>
-                      </div>
-                      <mat-chip color="primary" selected>Native</mat-chip>
-                    </div>
-                    <mat-divider></mat-divider>
-                    <div fxLayout="row" fxLayoutAlign="space-between center">
-                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                        <mat-icon>language</mat-icon>
-                        <span>English</span>
-                      </div>
-                      <mat-chip color="accent" selected>Intermediate</mat-chip>
-                    </div>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
-      </mat-card>
+<header class="page-header">
+  <div class="container intro">
+    <div>
+      <span class="eyebrow">About me</span>
+      <h1>{{ profile.name }}</h1>
+      <p class="role">{{ profile.role }}</p>
     </div>
+    <img class="avatar" [ngSrc]="profile.photo" width="640" height="741" [alt]="profile.shortName" />
+  </div>
+</header>
+
+<section class="section story-section" aria-label="Biography">
+  <div class="container story">
+    <div class="bio">
+      <p class="bio-lead">{{ profile.summary }}</p>
+      <p>
+        I started out building MEAN stack applications at Gulf Goal, creating responsive Angular interfaces and the
+        REST APIs behind them. Since 2022 I've worked at DAF as a mid-level MEAN stack developer, where I introduced
+        NestJS for a cleaner architecture, set up PostgreSQL with TypeORM and Sequelize, added Redis caching and
+        containerised our services with Docker.
+      </p>
+      <p>
+        Outside of work I build side projects end to end: from a developer article platform to a project-management
+        tool and an anonymous Q&amp;A app. You'll find them on the projects page.
+      </p>
+      <div class="btn-row">
+        <a mat-flat-button routerLink="/projects">See my projects</a>
+        <a mat-stroked-button routerLink="/experiences">View experience</a>
+      </div>
+    </div>
+
+    <aside class="card details" aria-label="Details">
+      <dl>
+        <div><dt>Location</dt><dd>{{ profile.location }}</dd></div>
+        <div><dt>Status</dt><dd>{{ profile.availability }}</dd></div>
+        @for (edu of profile.education; track edu.degree) {
+          <div><dt>Education</dt><dd>{{ edu.degree }}<br /><span class="muted">{{ edu.school }}, {{ edu.year }}</span></dd></div>
+        }
+        <div>
+          <dt>Languages</dt>
+          <dd>
+            @for (lang of profile.languages; track lang.name) {
+              <span class="lang">{{ lang.name }} <span class="muted">· {{ lang.level }}</span></span>
+            }
+          </dd>
+        </div>
+        <div><dt>Email</dt><dd><a [href]="'mailto:' + profile.email">{{ profile.email }}</a></dd></div>
+      </dl>
+      <div class="detail-links">
+        <a mat-stroked-button [href]="profile.links.github" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a mat-stroked-button [href]="profile.links.linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="approach-title">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">How I work</span>
+        <h2 id="approach-title" class="section-title">What you can expect</h2>
+      </div>
+    </div>
+    <div class="principles">
+      @for (item of principles; track item.title) {
+        <article class="card principle">
+          <span class="principle-icon"><mat-icon aria-hidden="true">{{ item.icon }}</mat-icon></span>
+          <h3>{{ item.title }}</h3>
+          <p class="muted">{{ item.text }}</p>
+        </article>
+      }
+    </div>
+    <div class="btn-row next">
+      <a mat-flat-button routerLink="/contact">Let's work together</a>
+    </div>
+  </div>
+</section>

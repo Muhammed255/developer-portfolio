@@ -1,66 +1,48 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatListModule} from '@angular/material/list';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { Observable } from 'rxjs';
-import { ThemeService } from './services/theme.service';
-import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
 import { selectCurrentTheme } from '../store/theme/theme.selectors';
 import { toggleTheme } from '../store/theme/theme.actions';
+import { profile } from '../data/profile.data';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     RouterOutlet,
-    RouterModule,
-    MatToolbarModule,
+    RouterLink,
+    RouterLinkActive,
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
     MatListModule,
-    MatMenuModule,
-    MatSlideToggleModule,
-    AsyncPipe
+    MatTooltipModule,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit {
-  
-  private store = inject(Store<AppState>);
-  private themeService = inject(ThemeService);
-  
-  portfolioName = 'Mohamed Abdelazim';
-  isDarkTheme$: Observable<boolean>;
+export class AppComponent {
+  private readonly store = inject(Store<AppState>);
 
-  constructor() {
-    this.isDarkTheme$ = this.store.select(selectCurrentTheme);
-  }
+  readonly profile = profile;
+  readonly year = new Date().getFullYear();
+  readonly isDarkTheme = toSignal(this.store.select(selectCurrentTheme), { initialValue: false });
 
-  ngOnInit() {
-    // Initialize theme
-    this.themeService.initTheme();
-  }
+  readonly navItems = [
+    { path: '/about', label: 'About' },
+    { path: '/experiences', label: 'Experience' },
+    { path: '/projects', label: 'Projects' },
+    { path: '/skills', label: 'Skills' },
+  ] as const;
 
-  onThemeToggle() {
+  onThemeToggle(): void {
     this.store.dispatch(toggleTheme());
   }
-
-  changeLanguage(lang: string) {
-    // Implement language change logic
-    console.log('Changing language to:', lang);
-  }
-
-  scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth', left:0 });
-  }
-  
 }

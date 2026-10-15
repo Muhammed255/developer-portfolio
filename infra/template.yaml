@@ -1,0 +1,237 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Developer portfolio frontend - private S3 bucket served through CloudFront
+
+Parameters:
+  ApiOrigin:
+    Type: String
+    Description: Origin of the contact-form API, allowed in the CSP connect-src (no trailing slash)
+    Default: https://so4ac1fs4a.execute-api.eu-central-1.amazonaws.com
+  DomainName:
+    Type: String
+    Description: Optional custom domain (e.g. portfolio.example.com). Leave empty to use the cloudfront.net domain.
+    Default: ""
+  CertificateArn:
+    Type: String
+    Description: ACM certificate ARN in us-east-1 covering DomainName. Required only with DomainName.
+    Default: ""
+
+Conditions:
+  HasCustomDomain: !And
+    - !Not [!Equals [!Ref DomainName, ""]]
+    - !Not [!Equals [!Ref CertificateArn, ""]]
+
+Resources:
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-old-versions
+            Status: Enabled
+            NoncurrentVersionExpiration:
+              NoncurrentDays: 30
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontRead
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub ${SiteBucket.Arn}/*
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource:
+              - !GetAtt SiteBucket.Arn
+              - !Sub ${SiteBucket.Arn}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub ${AWS::StackName}-oac
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  # Maps clean URLs to the prerendered files:
+  #   /            -> /index.html
+  #   /projects    -> /projects/index.html
+  #   /about/      -> /about/index.html
+  # and the removed /home and /blog pages -> 301 /
+  UrlRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub ${AWS::StackName}-url-rewrite
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Map extensionless paths to prerendered index.html files
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+          if (uri === '/home' || uri === '/home/' || uri === '/blog' || uri.startsWith('/blog/')) {
+            return { statusCode: 301, statusDescription: 'Moved Permanently',
+                     headers: { location: { value: '/' } } };
+          }
+          if (uri.endsWith('/')) {
+            request.uri = uri + 'index.html';
+          } else if (!uri.split('/').pop().includes('.')) {
+            request.uri = uri + '/index.html';
+          }
+          return request;
+        }
+
+  # HTML is uploaded with "no-cache", hashed assets with a one-year
+  # "immutable" Cache-Control; this policy honours those origin headers.
+  CachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub ${AWS::StackName}-cache
+        MinTTL: 0
+        DefaultTTL: 86400
+        MaxTTL: 31536000
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingGzip: true
+          EnableAcceptEncodingBrotli: true
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  SecurityHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub ${AWS::StackName}-security-headers
+        SecurityHeadersConfig:
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 63072000
+            IncludeSubdomains: true
+            Preload: true
+            Override: true
+          ContentTypeOptions:
+            Override: true
+          FrameOptions:
+            FrameOption: DENY
+            Override: true
+          ReferrerPolicy:
+            ReferrerPolicy: strict-origin-when-cross-origin
+            Override: true
+          # Inline scripts are restricted by the hash-based CSP <meta> tag
+          # Angular generates per page (security.autoCsp). Both policies are
+          # enforced, so this header covers everything except script hashes.
+          ContentSecurityPolicy:
+            ContentSecurityPolicy: !Sub >-
+              default-src 'self';
+              script-src 'self' 'unsafe-inline';
+              style-src 'self' 'unsafe-inline';
+              img-src 'self' data:;
+              font-src 'self';
+              connect-src 'self' ${ApiOrigin};
+              object-src 'none';
+              base-uri 'self';
+              form-action 'self';
+              frame-ancestors 'none';
+              upgrade-insecure-requests
+            Override: true
+        CustomHeadersConfig:
+          Items:
+            - Header: Permissions-Policy
+              Value: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+              Override: true
+            - Header: Cross-Origin-Opener-Policy
+              Value: same-origin
+              Override: true
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub ${AWS::StackName} portfolio site
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        # Includes Middle East and Africa edge locations.
+        PriceClass: PriceClass_200
+        DefaultRootObject: index.html
+        Aliases: !If [HasCustomDomain, [!Ref DomainName], !Ref AWS::NoValue]
+        ViewerCertificate: !If
+          - HasCustomDomain
+          - AcmCertificateArn: !Ref CertificateArn
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
+        Origins:
+          - Id: site-bucket
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        DefaultCacheBehavior:
+          TargetOriginId: site-bucket
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          CachedMethods: [GET, HEAD]
+          Compress: true
+          CachePolicyId: !Ref CachePolicy
+          ResponseHeadersPolicyId: !Ref SecurityHeadersPolicy
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt UrlRewriteFunction.FunctionMetadata.FunctionARN
+        # Unknown paths: S3 returns 403 (no ListBucket permission). Serve the
+        # client-rendered shell, whose "**" route shows the not-found page.
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 404
+            ResponsePagePath: /index.csr.html
+            ErrorCachingMinTTL: 60
+          - ErrorCode: 404
+            ResponseCode: 404
+            ResponsePagePath: /index.csr.html
+            ErrorCachingMinTTL: 60
+
+Outputs:
+  BucketName:
+    Description: Upload the contents of dist/developer-portfolio/browser here
+    Value: !Ref SiteBucket
+  DistributionId:
+    Description: Used for cache invalidations after each deploy
+    Value: !Ref Distribution
+  SiteUrl:
+    Description: Public URL of the site
+    Value: !If
+      - HasCustomDomain
+      - !Sub https://${DomainName}
+      - !Sub https://${Distribution.DomainName}
